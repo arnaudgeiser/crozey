@@ -1,17 +1,23 @@
 package ch.waterbead.services;
 
-import ch.waterbead.models.ReservationPeriod;
+import org.springframework.beans.factory.annotation.Autowired;
+
+import ch.waterbead.models.Reservation;
+import ch.waterbead.repositories.ReservationRepository;
 
 public class ReservationService {
-	public void add(ReservationPeriod reservation) {
-		
+	@Autowired
+	ReservationRepository reservationRepository;
+	
+	public void add(Reservation reservation) {
+		reservationRepository.saveAndFlush(reservation);
 	}
 	
-	public void update(ReservationPeriod reservation) {
-		
+	public void update(Reservation reservation) {
+		reservationRepository.saveAndFlush(reservation);
 	}
 	
-	public void delete(ReservationPeriod reservation) {
-		
+	public void delete(Reservation reservation) {
+		reservationRepository.delete(reservation);
 	}
 }
