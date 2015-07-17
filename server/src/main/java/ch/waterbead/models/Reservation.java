@@ -1,39 +1,19 @@
 package ch.waterbead.models;
 
-import java.time.LocalDate;
-import java.time.Period;
-import java.time.temporal.TemporalAdjuster;
-import java.time.temporal.TemporalAdjusters;
-import java.util.List;
-
-import org.hamcrest.core.IsEqual;
-
-
 public class Reservation {
-	private final LocalDate from;
-	private final LocalDate to;
+	private ReservationPeriod period;
+	private User user;
 	
-	public Reservation(LocalDate from, LocalDate to) {
-		this.from = from;
-		this.to = to;
+	public ReservationPeriod getPeriod() {
+		return period;
 	}
-
-	public LocalDate getFrom() {
-		return from;
+	public void setPeriod(ReservationPeriod period) {
+		this.period = period;
 	}
-	public LocalDate getTo() {
-		return to;
+	public User getUser() {
+		return user;
 	}
-	
-	public boolean chevauche(List<Reservation> reservations) {
-		boolean chevauche = false;
-		for(Reservation r : reservations) {
-			if((r.from.isAfter(from) || r.from.isEqual(from)) && r.to.isBefore(to)) chevauche= true;
-		}
-		return chevauche;
-	}
-
-	public boolean isValid() {
-		return Period.between(from, to).getDays() > 0;
+	public void setUser(User user) {
+		this.user = user;
 	}
 }

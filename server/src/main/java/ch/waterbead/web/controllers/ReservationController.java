@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import ch.waterbead.models.Reservation;
+import ch.waterbead.models.ReservationPeriod;
 import ch.waterbead.services.ReservationService;
 
 @RestController
@@ -19,21 +19,30 @@ public class ReservationController {
 	
 	@Autowired ReservationService reservationService;
 	
-	Reservation reservation = new Reservation(LocalDate.now(), LocalDate.now());
+	ReservationPeriod reservation = new ReservationPeriod(LocalDate.now(), LocalDate.now());
 	
 	@RequestMapping("/bymonth")
-	public List<Reservation> byMonth(@RequestParam(value="month") int month, @RequestParam(value="year") int year) {
+	public List<ReservationPeriod> byMonth(@RequestParam(value="month") int month, @RequestParam(value="year") int year) {
 		return Arrays.asList(reservation);
 	}
 	
 	@RequestMapping("/byyear")
-	public List<Reservation> byYear(@RequestParam(value="year") int year) {
+	public List<ReservationPeriod> byYear(@RequestParam(value="year") int year) {
 		return Arrays.asList(reservation);
 	}
 	
-	@RequestMapping(name="add", method=RequestMethod.POST)
-	public void add(Reservation reservation) {
+	@RequestMapping(name="/add", method=RequestMethod.POST)
+	public void add(ReservationPeriod reservation) {
 		reservationService.add(reservation);
 	}
-		
+	
+	@RequestMapping(name="/update", method=RequestMethod.PUT)
+	public void update(ReservationPeriod reservation) {
+		reservationService.update(reservation);
+	}
+	
+	@RequestMapping(name="/delete",method=RequestMethod.DELETE)
+	public void delete(ReservationPeriod reservation) {
+		reservationService.delete(reservation);
+	}
 }

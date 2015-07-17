@@ -1,12 +1,17 @@
 package ch.waterbead.services;
 
-import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Service;
-
-import ch.waterbead.models.Reservation;
+import ch.waterbead.models.ReservationPeriod;
 
 public class ReservationService {
-	public void add(Reservation reservation) {
+	public void add(ReservationPeriod reservation) {
+		
+	}
+	
+	public void update(ReservationPeriod reservation) {
+		
+	}
+	
+	public void delete(ReservationPeriod reservation) {
 		
 	}
 }

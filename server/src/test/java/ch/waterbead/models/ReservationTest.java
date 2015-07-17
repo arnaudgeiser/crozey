@@ -9,8 +9,8 @@ import org.junit.Before;
 import org.junit.Test;
 
 public class ReservationTest {
-	private Reservation reservation;
-	private List<Reservation> reservations;
+	private ReservationPeriod reservation;
+	private List<ReservationPeriod> reservations;
 	
 	@Before
 	public void setUp() {
@@ -59,10 +59,10 @@ public class ReservationTest {
 		Assert.assertEquals(reservation.isValid(), true);
 	}
 	
-	private Reservation createReservation(String sFrom, String sTo) {
+	private ReservationPeriod createReservation(String sFrom, String sTo) {
 		LocalDate from = createDate(sFrom);
 		LocalDate to = createDate(sTo);
-		return  new Reservation(from, to);
+		return  new ReservationPeriod(from, to);
 	}
 	
 	private LocalDate createDate(String date) {

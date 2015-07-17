@@ -25,6 +25,8 @@ targetCompatibility = 1.8
 
 dependencies {
     compile("org.springframework.boot:spring-boot-starter-web")
+    compile('org.springframework:spring-core')
+    compile ('commons-collections:commons-collections:3.2')
+    
     testCompile("junit:junit")
-    compile group: 'commons-collections', name: 'commons-collections', version: '3.2'
 }
