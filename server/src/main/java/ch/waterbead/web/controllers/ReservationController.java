@@ -23,7 +23,7 @@ public class ReservationController {
 	@Autowired ReservationService reservationService;
 	@Autowired ReservationRepository reservationRepository;
 	
-	ReservationPeriod reservation = new ReservationPeriod(LocalDate.now(), LocalDate.now());
+	Reservation reservation = new Reservation();
 	
 	@RequestMapping("/display")
 	public List<Reservation> display() {
@@ -31,12 +31,12 @@ public class ReservationController {
 	}
 	
 	@RequestMapping("/bymonth")
-	public List<ReservationPeriod> byMonth(@RequestParam(value="request") RequestReservationByMonth request) {
-		return Arrays.asList(reservation);
+	public List<Reservation> byMonth(@RequestParam(value="month")int month, @RequestParam(value="year") int year) {
+		return reservationRepository.findByMonthAndYear(month, year);
 	}
 	
 	@RequestMapping("/byyear")
-	public List<ReservationPeriod> byYear(@RequestParam(value="request") RequestReservationByMonth request) {
+	public List<Reservation> byYear(@RequestParam(value="request") RequestReservationByMonth request) {
 		return Arrays.asList(reservation);
 	}
 	
