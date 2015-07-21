@@ -1,0 +1,22 @@
+{
+  "name": "crozey",
+  "version": "0.0.1",
+  "authors": [
+    "Arnaud Geiser <arnaudgeiser@gmail.com>"
+  ],
+  "description": "Chalet reservations",
+  "main": "index.html",
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "bootstrap-datepicker": "~1.4.0",
+    "bootstrap": "~3.3.5",
+    "fullcalendar": "~2.3.2"
+  }
+}

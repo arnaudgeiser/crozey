@@ -6,6 +6,8 @@ import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
@@ -15,11 +17,11 @@ import ch.waterbead.converters.JsonDateSerializer;
 
 @Embeddable
 public class ReservationPeriod {
-	@Column(name="startDate")
+	@Column(name="startDate",columnDefinition="DATE")
 	@JsonSerialize(using = JsonDateSerializer.class)
 	@JsonDeserialize(using = JsonDateDeserializer.class)
 	private LocalDate from;
-	@Column(name="endDate")
+	@Column(name="endDate",columnDefinition="DATE")
 	@JsonSerialize(using = JsonDateSerializer.class)
 	@JsonDeserialize(using = JsonDateDeserializer.class)	
 	private LocalDate to;
@@ -50,5 +52,13 @@ public class ReservationPeriod {
 	
 	public boolean isValid() {
 		return Period.between(from, to).getDays() > 0;
+	}
+
+	public void setFrom(LocalDate from) {
+		this.from = from;
+	}
+
+	public void setTo(LocalDate to) {
+		this.to = to;
 	}
 }
