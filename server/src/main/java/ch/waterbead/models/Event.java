@@ -7,6 +7,7 @@ public class Event {
 	private final String start;
 	private final String end;
 	private boolean isPrivate = false;
+	private boolean allDay = true;
 	
 	public Event(long id, String title, String color, String start, String end) {
 		super();
@@ -39,5 +40,13 @@ public class Event {
 	
 	public boolean isPrivate() {
 		return isPrivate;
+	}
+
+	public boolean isAllDay() {
+		return allDay;
+	}
+
+	public void setAllDay(boolean allDay) {
+		this.allDay = allDay;
 	}
 }

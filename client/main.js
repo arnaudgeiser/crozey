@@ -1,9 +1,22 @@
 define(['jquery','fullcalendar','moment','bootstrap','bootstrap_datepicker','bootstrap_datepicker_fr_CH'], function($) {
 	'use strict'
 
+	var BASE_URL = 'http://localhost:8080/reservations';
+	var FEED_URL = 'http://localhost:8080/reservations/feed';
+
 	var currentYear = new Date().getFullYear();
 
 	var $calendar = $('#calendar');
+	var $modal = $('#myModal');
+
+	var $reserver = $('#reserver');
+	var $supprimer = $('#supprimer');
+
+	var $id = $('#id');
+	var $title = $('#title');
+	var $from = $('#from');
+	var $to = $('#to');
+	var $private = $('#private');
 
 	$calendar.fullCalendar({
 	    fixedWeekCount: false,
@@ -12,43 +25,109 @@ define(['jquery','fullcalendar','moment','bootstrap','bootstrap_datepicker','boo
 	    defaultDate: $.fullCalendar.moment(currentYear+'-12-01'),
 	    lang : 'fr',
 	    eventSources : [{
-	        url: 'http://localhost:8080/reservations/feed',
+	        url: FEED_URL,
 	    }],
-	    loading : function( isLoading, view ) {
-	    },
 	    eventRender : function(event, element, view) {
+	    	var html = '<b>'+event.title+'</b>';
+	    	element.empty().append(html);
 	    },
-	    dayClick : function(date, jsEvent, view) {
+	    dayClick : function(date, jsEvent, view) {	    	
 	        var stringMoment = date.format('DD.MM.YYYY');
-	        $('.periode').val(stringMoment);
-	        $('#myModal').modal()
+
+	        $id.val('');
+	        $from.datepicker('update',stringMoment);
+	        $to.datepicker('update',stringMoment);
+	        $modal.modal();
+	        $supprimer.hide();
+	        $reserver.text('Réserver');
+
+	    },
+	    eventClick : function(event, jsEvent, view) {
+	    	var start = event.start;
+        	var end = event.end || start;
+        	var end = end.subtract(1,'d');
+
+	    	$title.val(event.title);
+	    	$from.val(start.format('DD.MM.YYYY'));
+	    	$to.val(end.format('DD.MM.YYYY'));
+	    	$id.val(event.id);
+	    	$modal.modal();
+	    	$supprimer.show();
+	    	$reserver.text('Modifier');
 	    }
 	});
 
-	$('#reserver').click(function() {
-		title = $('#title').val();
-		from = $('#from').datepicker('getDate').toISOString();
-		to = $('#to').datepicker('getDate').toISOString();
-		isPrivate = $('#private').prop('checked');
-		var newEvent = {
+	$supprimer.click(function() {
+		var eventObject = retrieveEvent();
+		reservationService.remove(eventObject);
+	});
+
+	$reserver.click(function() {
+		var eventObject = retrieveEvent();
+		reservationService.persist(eventObject);
+	});
+
+	function retrieveEvent() {
+		var id = $id.val();
+		var title = $title.val();
+		var from = $from.datepicker('getDate').toISOString();
+		var to = $to.datepicker('getDate').toISOString();
+		var isPrivate = $private.prop('checked');
+		var eventObject = {
+			id : id,
 			title : title,
 			period : {
 				from : from,
 				to : to
 			},
-			'private' : isPrivate,
+			privacy : isPrivate,
 		};
-		$.ajax({
-			url : 'http://localhost:8080/reservations/add',
-			data : JSON.stringify(newEvent),
-			contentType: "application/json",
-			method : 'POST',
-			success : function() {
-				$calendar.fullCalendar('refetchEvents');
-			},
-			error : function() {
-				$calendar.fullCalendar('refetchEvents');
+		return eventObject;
+	}
+
+	var reservationService = (function() {
+		function persist(eventObject) {
+			console.log('persist ' + eventObject.id);
+			if(eventObject.id) {
+				update(eventObject);
+			} else {
+				add(eventObject);
 			}
-		});
-	});
+		}
+
+		function add(eventObject) {
+			dbAction(eventObject, 'POST');
+		}
+
+		function update(eventObject) {
+			dbAction(eventObject, 'PUT');
+		}
+
+		function remove(eventObject) {
+			dbAction(eventObject, 'DELETE');
+		}
+
+		function dbAction(eventObject, method) {
+			var method = 
+			$.ajax({
+				url : BASE_URL,
+				data : JSON.stringify(eventObject),
+				contentType: "application/json",
+				method : method,
+				success : function() {
+					$calendar.fullCalendar('refetchEvents');
+					$modal.modal('hide');
+				},
+				error : function() {
+					$calendar.fullCalendar('refetchEvents');
+				}
+			});
+		}
+
+		return {
+			persist : persist,
+			remove : remove
+		}
+			
+	})();
 });

@@ -1,5 +1,7 @@
 package ch.waterbead.models;
 
+import java.time.LocalDate;
+
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -18,7 +20,7 @@ public class Reservation {
 	private ReservationPeriod period;
 	@ManyToOne
 	private User user;
-	private boolean isPrivate;
+	private boolean privacy;
 	
 	public Long getId() {
 		return id;
@@ -39,13 +41,22 @@ public class Reservation {
 		this.user = user;
 	}
 	
-	public boolean isPrivate() {
-		return isPrivate;
-	}
 	public String getTitle() {
 		return title;
 	}
 	public void setTitle(String title) {
 		this.title = title;
+	}
+	public LocalDate getFrom() {
+		return period.getFrom();
+	}
+	public LocalDate getTo() {
+		return period.getTo();
+	}
+	public boolean isPrivacy() {
+		return privacy;
+	}
+	public void setPrivacy(boolean privacy) {
+		this.privacy = privacy;
 	}
 }
