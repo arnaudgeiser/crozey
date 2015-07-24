@@ -42,6 +42,7 @@ public class ReservationController {
 		reservationService.update(reservation);
 	}
 	
+
 	@RequestMapping(consumes="application/json",produces="application/json",method=RequestMethod.DELETE)
 	public void delete(@RequestBody Reservation reservation) {
 		reservationService.delete(reservation);

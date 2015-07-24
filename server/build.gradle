@@ -31,5 +31,7 @@ dependencies {
     compile('org.hsqldb:hsqldb:2.0.0')
     compile('com.fasterxml.jackson.core:jackson-databind:2.4.2')
     compile('com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.4.2')
+	compile 'org.springframework.security:spring-security-web'
+	compile 'org.springframework.security:spring-security-config'
     testCompile("junit:junit")
 }

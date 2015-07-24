@@ -3,14 +3,18 @@ define(['jquery','fullcalendar','moment','bootstrap','bootstrap_datepicker','boo
 
 	var BASE_URL = 'http://localhost:8080/reservations';
 	var FEED_URL = 'http://localhost:8080/reservations/feed';
+	var LOGIN_URL = 'http://localhost:8080/login';
 
 	var currentYear = new Date().getFullYear();
 
 	var $calendar = $('#calendar');
-	var $modal = $('#myModal');
+	var $modalAddEvent = $('#modalAddEvent');
+	var $modalLogin = $('#modalLogin');
 
 	var $reserver = $('#reserver');
 	var $supprimer = $('#supprimer');
+	var $login = $('#login');
+	var $connexion = $('#connexion');
 
 	var $id = $('#id');
 	var $title = $('#title');
@@ -37,7 +41,7 @@ define(['jquery','fullcalendar','moment','bootstrap','bootstrap_datepicker','boo
 	        $id.val('');
 	        $from.datepicker('update',stringMoment);
 	        $to.datepicker('update',stringMoment);
-	        $modal.modal();
+	        $modalAddEvent.modal();
 	        $supprimer.hide();
 	        $reserver.text('Réserver');
 
@@ -51,7 +55,7 @@ define(['jquery','fullcalendar','moment','bootstrap','bootstrap_datepicker','boo
 	    	$from.val(start.format('DD.MM.YYYY'));
 	    	$to.val(end.format('DD.MM.YYYY'));
 	    	$id.val(event.id);
-	    	$modal.modal();
+	    	$modalAddEvent.modal();
 	    	$supprimer.show();
 	    	$reserver.text('Modifier');
 	    }
@@ -64,7 +68,26 @@ define(['jquery','fullcalendar','moment','bootstrap','bootstrap_datepicker','boo
 
 	$reserver.click(function() {
 		var eventObject = retrieveEvent();
-		reservationService.persist(eventObject);
+		if(validator.isValid()) {
+			reservationService.persist(eventObject);
+		}
+	});
+
+	$login.click(function() {
+		$modalLogin.modal();
+	});
+
+	$connexion.click(function() {
+		$.ajax({
+			url :  LOGIN_URL,
+			method : 'POST',
+			success : function() {
+				alert('sucess');
+			},
+			error : function(e) {
+				alert(e);
+			}
+		});
 	});
 
 	function retrieveEvent() {
@@ -87,7 +110,6 @@ define(['jquery','fullcalendar','moment','bootstrap','bootstrap_datepicker','boo
 
 	var reservationService = (function() {
 		function persist(eventObject) {
-			console.log('persist ' + eventObject.id);
 			if(eventObject.id) {
 				update(eventObject);
 			} else {
@@ -114,12 +136,18 @@ define(['jquery','fullcalendar','moment','bootstrap','bootstrap_datepicker','boo
 				data : JSON.stringify(eventObject),
 				contentType: "application/json",
 				method : method,
+				beforeSend : function(xhr) {
+					xhr.setRequestHeader("Authorization", "Basic " + btoa("arnaud:pass2"));
+				},
 				success : function() {
 					$calendar.fullCalendar('refetchEvents');
-					$modal.modal('hide');
+					$modalAddEvent.modal('hide');
 				},
-				error : function() {
+				error : function(jqXHR, textStatus, errorThrown ) {
 					$calendar.fullCalendar('refetchEvents');
+					if(jqXHR.status==404) {
+						alert("Pas authentifié !")
+					}
 				}
 			});
 		}
@@ -128,6 +156,17 @@ define(['jquery','fullcalendar','moment','bootstrap','bootstrap_datepicker','boo
 			persist : persist,
 			remove : remove
 		}
-			
+	})();
+
+	var validator = (function () {
+		function isValid() {
+			var eventObject = retrieveEvent();
+			console.log('isValid');
+			if(eventObject.title.length==0 || eventObject.period.from.length==0 || eventObject.period.to.length==0) {
+				return false;
+			}
+			return true;
+		}
+		return {isValid : isValid};
 	})();
 });

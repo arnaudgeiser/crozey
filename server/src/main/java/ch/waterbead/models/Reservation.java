@@ -59,4 +59,8 @@ public class Reservation {
 	public void setPrivacy(boolean privacy) {
 		this.privacy = privacy;
 	}
+	
+	public boolean hasSameId(Reservation reservation) {
+		return reservation.getId().equals(id);
+	}
 }
