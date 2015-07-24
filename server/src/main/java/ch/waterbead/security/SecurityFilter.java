@@ -10,6 +10,7 @@ import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.annotation.Order;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -17,7 +18,6 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
-@Configuration
 public class SecurityFilter extends UsernamePasswordAuthenticationFilter {
 	@Autowired
 	@Override
@@ -30,21 +30,16 @@ public class SecurityFilter extends UsernamePasswordAuthenticationFilter {
 			throws IOException, ServletException {
 		String username = req.getParameter("username");
 		String password = req.getParameter("password");
-		//UserDetails userDetails = userDetailsService.loadUserByUsername(username);
 		
+		if(username==null || password ==null) return;
 		
-		Authentication request = new UsernamePasswordAuthenticationToken("arnaud", "pass");
-		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-		if(auth!=null) {
-			boolean isAuthentificated = auth.isAuthenticated();
-		}
+		Authentication request = new UsernamePasswordAuthenticationToken(username, password);
 		try {
 			Authentication result = getAuthenticationManager().authenticate(request);
-			SecurityContextHolder.setStrategyName(SecurityContextHolder.MODE_GLOBAL);
 			SecurityContextHolder.getContext().setAuthentication(result);
 		}
 		catch(AuthenticationException e) {
-			e.printStackTrace();
+			logger.error(e);
 		}
 		chain.doFilter(req, res);
 	}

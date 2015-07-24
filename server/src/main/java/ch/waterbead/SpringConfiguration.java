@@ -1,7 +1,5 @@
 package ch.waterbead;
 
-import java.util.Arrays;
-
 import javax.annotation.PostConstruct;
 import javax.persistence.EntityManagerFactory;
 import javax.sql.DataSource;
@@ -16,8 +14,6 @@ import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseType;
 import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.ProviderManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -31,7 +27,6 @@ import ch.waterbead.repositories.UserRepository;
 import ch.waterbead.security.CustomUserDetailsService;
 import ch.waterbead.security.SecurityFilter;
 import ch.waterbead.services.ReservationService;
-import ch.waterbead.web.filters.RESTEntryPoint;
 
 @Configuration
 @EnableJpaRepositories(basePackages = "ch.waterbead.repositories")
@@ -48,7 +43,6 @@ public class SpringConfiguration {
 	public DataSource dataSource() {
 		EmbeddedDatabaseBuilder builder = new EmbeddedDatabaseBuilder();
 		return builder.setType(EmbeddedDatabaseType.HSQL).build();
-		
 	}
 	
 	@Bean
@@ -65,7 +59,7 @@ public class SpringConfiguration {
 
 		return factory.getObject();
 	}
-
+	
 	@Bean
 	public PlatformTransactionManager transactionManager(final EntityManagerFactory emf) {
 		final JpaTransactionManager transactionManager = new JpaTransactionManager();
@@ -77,38 +71,6 @@ public class SpringConfiguration {
 	@Bean
 	public UserDetailsService UserDetailsService() {
 		return new CustomUserDetailsService();
-	}
-	
-	@EnableWebSecurity
-	public static class SpringSecurity extends WebSecurityConfigurerAdapter {
-		@Autowired
-		private UserDetailsService userDetailsService;
-		@Autowired
-		private UserRepository userRepository;
-		
-		@Autowired
-		public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
-			auth.userDetailsService(userDetailsService);
-		}
-		
-		
-		@PostConstruct
-		public void tets() {
-			User user = new User();
-			user.setUsername("arnaud");
-			user.setPassword("pass");
-			userRepository.save(user);
-		}
-		
-		@Override
-		protected void configure(HttpSecurity http) throws Exception {
-			http.authorizeRequests().antMatchers(HttpMethod.POST, "/*").authenticated()
-				.and().authorizeRequests().antMatchers(HttpMethod.PUT, "/*").authenticated()
-				.and().authorizeRequests().antMatchers(HttpMethod.HEAD, "/*").authenticated();
-			http.authorizeRequests().antMatchers("/reservations/feed").permitAll();
-			http.csrf().disable();
-			http.rememberMe();
-		}
 	}
 }
 
