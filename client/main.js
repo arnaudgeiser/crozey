@@ -3,7 +3,7 @@ define(['jquery','fullcalendar','moment','bootstrap','bootstrap_datepicker','boo
 
 	var BASE_URL = 'http://localhost:8080/reservations';
 	var FEED_URL = 'http://localhost:8080/reservations/feed';
-	var LOGIN_URL = 'http://localhost:8080/login';
+	var LOGIN_URL = 'http://localhost:8080/authentication/login';
 
 	var currentYear = new Date().getFullYear();
 
@@ -78,15 +78,24 @@ define(['jquery','fullcalendar','moment','bootstrap','bootstrap_datepicker','boo
 	});
 
 	$connexion.click(function() {
+		var user = {
+			username : "arnaud",
+			password : "pass"
+		};
 		$.ajax({
 			url :  LOGIN_URL,
 			method : 'POST',
+			data : JSON.stringify(user),
+			contentType: "application/json",
 			success : function() {
 				alert('sucess');
 			},
 			error : function(e) {
 				alert(e);
-			}
+			},
+			xhrFields: {
+    			  withCredentials: true
+   			}
 		});
 	});
 
@@ -136,9 +145,6 @@ define(['jquery','fullcalendar','moment','bootstrap','bootstrap_datepicker','boo
 				data : JSON.stringify(eventObject),
 				contentType: "application/json",
 				method : method,
-				beforeSend : function(xhr) {
-					xhr.setRequestHeader("Authorization", "Basic " + btoa("arnaud:pass2"));
-				},
 				success : function() {
 					$calendar.fullCalendar('refetchEvents');
 					$modalAddEvent.modal('hide');
@@ -148,7 +154,11 @@ define(['jquery','fullcalendar','moment','bootstrap','bootstrap_datepicker','boo
 					if(jqXHR.status==404) {
 						alert("Pas authentifié !")
 					}
-				}
+				},
+				xhrFields: {
+    			  withCredentials: true
+   				},
+   				crossDomain: true
 			});
 		}
 

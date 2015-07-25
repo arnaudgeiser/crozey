@@ -3,6 +3,8 @@ package ch.waterbead.web.controllers;
 import java.time.LocalDate;
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -32,9 +34,10 @@ public class ReservationController {
 	}
 	
 	@RequestMapping(consumes="application/json",produces="application/json",method=RequestMethod.POST)
-	public void add(@RequestBody Reservation reservation) {
+	public Reservation add(@RequestBody Reservation reservation, HttpServletRequest req) {
 		if(isReservationsNotExist(reservation.getFrom(), reservation.getTo()))
 			reservationService.add(reservation);
+		return reservation;
 	}
 	
 	@RequestMapping(consumes="application/json",produces="application/json",method=RequestMethod.PUT)
