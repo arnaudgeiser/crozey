@@ -6,6 +6,7 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 import ch.waterbead.models.Event;
 import ch.waterbead.models.EventUtil;
 import ch.waterbead.models.Reservation;
+import ch.waterbead.models.User;
 import ch.waterbead.repositories.ReservationRepository;
 import ch.waterbead.services.ReservationService;
 
@@ -35,6 +37,8 @@ public class ReservationController {
 	
 	@RequestMapping(consumes="application/json",produces="application/json",method=RequestMethod.POST)
 	public Reservation add(@RequestBody Reservation reservation, HttpServletRequest req) {
+		User user = (User)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		reservation.setUser(user);
 		if(isReservationsNotExist(reservation.getFrom(), reservation.getTo()))
 			reservationService.add(reservation);
 		return reservation;

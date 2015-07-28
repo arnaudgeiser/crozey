@@ -29,11 +29,11 @@ public class SimpleCORSFilter implements Filter {
 		response.setHeader("Access-Control-Allow-Origin", String.valueOf(request.getHeader("referer")));
 		response.setHeader("Access-Control-Allow-Headers", "Origin, Accept, X-Requested-With, Content-Type, Access-Control-Request-Method, Access-Control-Request-Headers, Authorization, X-Custom-Header");
 		response.setHeader("Access-Control-Allow-Credentials", "true");
+		response.setHeader("Access-Control-Allow-Methods", "POST, GET, OPTIONS, DELETE, PUT");
+		response.setHeader("Access-Control-Max-Age", "3600");
 		if(request.getMethod().equals(RequestMethod.OPTIONS.name())) {
 			response.flushBuffer();
 		} else {
-			response.setHeader("Access-Control-Allow-Methods", "POST, GET, OPTIONS, DELETE, PUT");
-			response.setHeader("Access-Control-Max-Age", "3600");
 			chain.doFilter(req, res);
 		}
 	}

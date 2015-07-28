@@ -3,6 +3,7 @@ package ch.waterbead;
 import javax.persistence.EntityManagerFactory;
 import javax.sql.DataSource;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
@@ -24,13 +25,6 @@ import ch.waterbead.services.ReservationService;
 @EnableJpaRepositories(basePackages = "ch.waterbead.repositories")
 @EnableTransactionManagement
 public class SpringDevConfiguration {
-	private static final ReservationService reservationService = new ReservationService();
-
-	@Bean
-	public ReservationService getReservationService() {
-		return reservationService;
-	}
-
 	@Bean
 	public DataSource dataSource() {
 		EmbeddedDatabaseBuilder builder = new EmbeddedDatabaseBuilder();

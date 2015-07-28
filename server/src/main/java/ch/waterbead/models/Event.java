@@ -6,16 +6,18 @@ public class Event {
 	private final String color;
 	private final String start;
 	private final String end;
+	private final String username;
 	private boolean isPrivate = false;
 	private boolean allDay = true;
 	
-	public Event(long id, String title, String color, String start, String end) {
+	public Event(long id, String title, String color, String start, String end, String username) {
 		super();
 		this.id = id;
 		this.title = title;
 		this.color = color;
 		this.start = start;
 		this.end = end;
+		this.username = username;
 	}
 
 	public long getId() {
@@ -48,5 +50,9 @@ public class Event {
 
 	public void setAllDay(boolean allDay) {
 		this.allDay = allDay;
+	}
+
+	public String getUsername() {
+		return username;
 	}
 }

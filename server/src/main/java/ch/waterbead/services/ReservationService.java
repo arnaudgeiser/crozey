@@ -1,10 +1,12 @@
 package ch.waterbead.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import ch.waterbead.models.Reservation;
 import ch.waterbead.repositories.ReservationRepository;
 
+@Service
 public class ReservationService {
 	@Autowired
 	ReservationRepository reservationRepository;

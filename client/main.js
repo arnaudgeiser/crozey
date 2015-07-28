@@ -4,6 +4,7 @@ define(['jquery','fullcalendar','moment','bootstrap','bootstrap_datepicker','boo
 	var BASE_URL = 'http://localhost:8080/reservations';
 	var FEED_URL = 'http://localhost:8080/reservations/feed';
 	var LOGIN_URL = 'http://localhost:8080/authentication/login';
+	var LOGOUT_URL = 'http://localhost:8080/authentication/logout';
 
 	var currentYear = new Date().getFullYear();
 
@@ -14,7 +15,11 @@ define(['jquery','fullcalendar','moment','bootstrap','bootstrap_datepicker','boo
 	var $reserver = $('#reserver');
 	var $supprimer = $('#supprimer');
 	var $login = $('#login');
+	var $logout = $('#logout');
 	var $connexion = $('#connexion');
+
+	var $username = $('#username');
+	var $password = $('#password');
 
 	var $id = $('#id');
 	var $title = $('#title');
@@ -32,7 +37,7 @@ define(['jquery','fullcalendar','moment','bootstrap','bootstrap_datepicker','boo
 	        url: FEED_URL,
 	    }],
 	    eventRender : function(event, element, view) {
-	    	var html = '<b>'+event.title+'</b>';
+	    	var html = '<b>'+event.title+'</b><br />'+event.username;
 	    	element.empty().append(html);
 	    },
 	    dayClick : function(date, jsEvent, view) {	    	
@@ -77,21 +82,41 @@ define(['jquery','fullcalendar','moment','bootstrap','bootstrap_datepicker','boo
 		$modalLogin.modal();
 	});
 
+	var logged = false;
+
+	$logout.click(function() {
+		$.ajax({
+			url : LOGOUT_URL,
+			method : 'POST',
+			success : function() {
+				logged = false;
+				$login.show();
+				$logout.hide();
+			}
+		});
+	});
+
 	$connexion.click(function() {
 		var user = {
-			username : "arnaud",
-			password : "pass"
+			username : $username.val(),
+			password : $password.val()
 		};
+
+		console.log(JSON.stringify(user));
+
 		$.ajax({
 			url :  LOGIN_URL,
 			method : 'POST',
 			data : JSON.stringify(user),
 			contentType: "application/json",
 			success : function() {
-				alert('sucess');
+				$modalLogin.modal('hide');
+				logged = true;
+				$login.hide();
+				$logout.show();
 			},
 			error : function(e) {
-				alert(e);
+				alert("Echec de l'authentication");
 			},
 			xhrFields: {
     			  withCredentials: true
@@ -135,6 +160,7 @@ define(['jquery','fullcalendar','moment','bootstrap','bootstrap_datepicker','boo
 		}
 
 		function remove(eventObject) {
+			console.log('remove');
 			dbAction(eventObject, 'DELETE');
 		}
 
