@@ -49,7 +49,7 @@ public class ReservationPeriod {
 	}
 	
 	public boolean isValid() {
-		return Period.between(from, to).getDays() > 0;
+		return (from.isBefore(to) || from.isEqual(to)) && Period.between(from, to).getDays() > 0;
 	}
 
 	public void setFrom(LocalDate from) {

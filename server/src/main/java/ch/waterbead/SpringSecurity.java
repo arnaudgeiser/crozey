@@ -19,29 +19,17 @@ import ch.waterbead.security.RestAuthenticationEntryPoint;
 public class SpringSecurity extends WebSecurityConfigurerAdapter {
 	@Autowired
 	private UserDetailsService userDetailsService;
-	@Autowired
-	private UserRepository userRepository;
 	
 	@Autowired
 	public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
 		auth.userDetailsService(userDetailsService);
 	}
 	
-	@PostConstruct
-	public void tets() {
-		User user = new User();
-		user.setUsername("arnaud");
-		user.setPassword("pass");
-		userRepository.save(user);
-	}
-	
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
-		http.rememberMe();
 		http.authorizeRequests().antMatchers("/reservations/feed").permitAll();
 		http.authorizeRequests().antMatchers("/authentication/**").permitAll();
 		http.authorizeRequests().anyRequest().authenticated();
-		//http.sessionManagement().maximumSessions(1);
 		http.csrf().disable();
 		http.exceptionHandling().authenticationEntryPoint(new RestAuthenticationEntryPoint());
 	}
