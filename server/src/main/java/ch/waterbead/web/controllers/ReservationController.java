@@ -1,5 +1,6 @@
 package ch.waterbead.web.controllers;
 
+import java.security.Security;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -46,16 +47,37 @@ public class ReservationController {
 	
 	@RequestMapping(consumes="application/json",produces="application/json",method=RequestMethod.PUT)
 	public void update(@RequestBody Reservation reservation) {
-		reservationService.update(reservation);
+		User user = getCurrentUser();
+		reservation.setUser(user);
+		if(hasRightToModify(reservation)) {
+			reservationService.update(reservation);
+		}
 	}
 	
 
 	@RequestMapping(consumes="application/json",produces="application/json",method=RequestMethod.DELETE)
 	public void delete(@RequestBody Reservation reservation) {
-		reservationService.delete(reservation);
+		User user = getCurrentUser();
+		reservation.setUser(user);
+		if(hasRightToModify(reservation)) {
+			reservationService.delete(reservation);
+		}
 	}
 	
 	private boolean isReservationsNotExist(LocalDate from, LocalDate to) {
 		return reservationRepository.findByMonthAndYear(from, to).size() == 0;
+	}
+	
+	private boolean hasRightToModify(Reservation reservation) {
+		User user = getCurrentUser();
+		Reservation reservationExistante = reservationRepository.findOne(reservation.getId());
+		if(reservationExistante.getUser().equals(user)) {
+			return true;
+		}
+		return false;
+	}
+	
+	private User getCurrentUser() {
+		return (User)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 	}
 }

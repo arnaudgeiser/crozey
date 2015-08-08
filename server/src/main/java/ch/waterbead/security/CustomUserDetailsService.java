@@ -11,7 +11,7 @@ import ch.waterbead.repositories.UserRepository;
 public class CustomUserDetailsService implements UserDetailsService {
 	@Autowired
 	private UserRepository userRepository;
-
+	
 	public UserDetails loadUserByUsername(String username) {
 		User user = userRepository.findByUsername(username);
 		if(user == null) {

@@ -5,8 +5,8 @@ import java.util.List;
 
 
 public class EventUtil {
-	private static final String PRIVATE = "blue";
-	private static final String NON_PRIVATE = "red";
+	private static final String PRIVATE = "#FF6600";
+	private static final String NON_PRIVATE = "#66CCFF";
 	
 	public static List<Event> toEvents(List<Reservation> reservations) {
 		List<Event> events = new ArrayList<>();

@@ -65,4 +65,14 @@ public class User implements UserDetails {
 	public Collection<? extends GrantedAuthority> getAuthorities() {
 		return Arrays.asList(new SimpleGrantedAuthority("ROLE_USER"));
 	}
+	
+	@Override
+	public boolean equals(Object other) {
+		if(other instanceof User) {
+			if(((User) other).username.equals(this.username)) {
+				return true;
+			}
+		}
+		return false;
+	}
 }

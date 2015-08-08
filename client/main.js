@@ -1,10 +1,45 @@
-define(['jquery','fullcalendar','moment','bootstrap','bootstrap_datepicker','bootstrap_datepicker_fr_CH'], function($) {
+define([
+	'jquery',
+	'fullcalendar',
+	'moment',
+	'bootstrap',
+	'bootstrap_datepicker',
+	'bootstrap_datepicker_fr_CH',
+	'fullcalendar_all_lang'], 
+	
+	function($) {
 	'use strict'
+
+	$.ajaxSetup({
+		error : function(jqXHR, textStatus, errorThrown) {
+			$calendar.fullCalendar('refetchEvents');
+			if(jqXHR.status==401) {
+				alert("Tu n'es pas authentifié. Commence par créer un compte s'il te plait !");
+			} else {
+				alert("Oups... Ca ne marche pas, si c'est vraiment un problème, tente de contacter Arnaud");
+			}
+		},
+		contentType: "application/json",
+		xhrFields: {
+    		withCredentials: true
+   		}
+	});
 
 	var BASE_URL = 'http://localhost:8080/reservations';
 	var FEED_URL = 'http://localhost:8080/reservations/feed';
 	var LOGIN_URL = 'http://localhost:8080/authentication/login';
 	var LOGOUT_URL = 'http://localhost:8080/authentication/logout';
+	var ISLOGGED_URL = 'http://localhost:8080/authentication/logged';
+
+	$.ajax({
+		url : ISLOGGED_URL,
+		success : function(data) {
+			if(data) {
+				$login.hide();
+				$logout.show();
+			}
+		}
+	});
 
 	var currentYear = new Date().getFullYear();
 
@@ -108,7 +143,6 @@ define(['jquery','fullcalendar','moment','bootstrap','bootstrap_datepicker','boo
 			url :  LOGIN_URL,
 			method : 'POST',
 			data : JSON.stringify(user),
-			contentType: "application/json",
 			success : function() {
 				$modalLogin.modal('hide');
 				logged = true;
@@ -116,11 +150,8 @@ define(['jquery','fullcalendar','moment','bootstrap','bootstrap_datepicker','boo
 				$logout.show();
 			},
 			error : function(e) {
-				alert("Echec de l'authentication");
-			},
-			xhrFields: {
-    			  withCredentials: true
-   			}
+				alert("Es-tu sur de ton mot de passe ?");
+			}
 		});
 	});
 
@@ -156,6 +187,9 @@ define(['jquery','fullcalendar','moment','bootstrap','bootstrap_datepicker','boo
 		}
 
 		function update(eventObject) {
+			var updateError = function() {
+				alert('Tu crois vraiment avoir le droit de modifier cette réservation ?!')
+			}
 			dbAction(eventObject, 'PUT');
 		}
 
@@ -164,27 +198,17 @@ define(['jquery','fullcalendar','moment','bootstrap','bootstrap_datepicker','boo
 			dbAction(eventObject, 'DELETE');
 		}
 
-		function dbAction(eventObject, method) {
+		function dbAction(eventObject, method, errorCallback) {
 			var method = 
 			$.ajax({
 				url : BASE_URL,
 				data : JSON.stringify(eventObject),
-				contentType: "application/json",
 				method : method,
 				success : function() {
 					$calendar.fullCalendar('refetchEvents');
 					$modalAddEvent.modal('hide');
 				},
-				error : function(jqXHR, textStatus, errorThrown ) {
-					$calendar.fullCalendar('refetchEvents');
-					if(jqXHR.status==404) {
-						alert("Pas authentifié !")
-					}
-				},
-				xhrFields: {
-    			  withCredentials: true
-   				},
-   				crossDomain: true
+				error : errorCallback
 			});
 		}
 

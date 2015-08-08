@@ -1,8 +1,8 @@
 package ch.waterbead.web.controllers;
 
 import java.io.IOException;
-import java.util.concurrent.atomic.AtomicInteger;
 
+import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -12,6 +12,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.context.HttpSessionSecurityContextRepository;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -50,8 +51,23 @@ public class AuthenticationController {
 	}
 	
 	@RequestMapping(value="/logout")
-	public void logout() {
-		SecurityContextHolder.getContext().setAuthentication(null);
+	public void logout(HttpServletRequest request) throws ServletException {
+		SecurityContextHolder.clearContext();
+		HttpSession session = request.getSession(false);
+        if (session != null) {
+            session.invalidate();
+        }
+	}
+	
+	@RequestMapping(value="/logged",produces="application/json")
+	public boolean isLogged(HttpServletRequest request) {
+		HttpSession session = request.getSession(false);
+		if(session == null) return false;
+		SecurityContext context = (SecurityContext) session.getAttribute(HttpSessionSecurityContextRepository.SPRING_SECURITY_CONTEXT_KEY);
+		if(context==null) return false;
+		Authentication auth = context.getAuthentication();
+		if(auth == null) return false;
+		return true;
 	}
 	
 	@RequestMapping(value="/newaccount", method=RequestMethod.POST) 
