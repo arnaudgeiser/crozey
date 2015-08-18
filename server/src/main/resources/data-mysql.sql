@@ -1,2 +1,2 @@
-insert into users (firstname, lastname, password, username) values ('Arnaud', 'Geiser', '$2a$10$PN5H6p0PQRjo6AlVEnAD9O2jjIv53m1ZIjBFbaA5j2QmazR1Y0SgW', 'arnaud');
-insert into users (firstname, lastname, password, username) values ('Sophie', 'Wälti', '$2a$10$PN5H6p0PQRjo6AlVEnAD9O2jjIv53m1ZIjBFbaA5j2QmazR1Y0SgW', 'sophie');
+insert into users (name, password, username) values ('Arnaud Geiser', '$2a$10$PN5H6p0PQRjo6AlVEnAD9O2jjIv53m1ZIjBFbaA5j2QmazR1Y0SgW', 'arnaud');
+insert into users (name, password, username) values ('Sophie Wälti', '$2a$10$PN5H6p0PQRjo6AlVEnAD9O2jjIv53m1ZIjBFbaA5j2QmazR1Y0SgW', 'sophie');

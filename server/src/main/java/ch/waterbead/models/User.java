@@ -3,6 +3,7 @@ package ch.waterbead.models;
 import java.util.Arrays;
 import java.util.Collection;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -15,27 +16,22 @@ import org.springframework.security.core.userdetails.UserDetails;
 @Entity
 @Table(name="users")
 public class User implements UserDetails {
+	private static final long serialVersionUID = -4124437701361743585L;
+	
 	@Id
 	@GeneratedValue
 	private Long id;
-	private String firstname;
-	private String lastname;
+	@Column(name="name")
+	private String firstNameLastName;
 	private String password;
 	private String username;
 	
-	public String getFirstname() {
-		return firstname;
+	public String getFirstNameLastName() {
+		return firstNameLastName;
 	}
-	public void setFirstname(String firstname) {
-		this.firstname = firstname;
+	public void setFirstNameLastName(String firstNameLastName) {
+		this.firstNameLastName = firstNameLastName;
 	}
-	public String getLastname() {
-		return lastname;
-	}
-	public void setLastname(String lastname) {
-		this.lastname = lastname;
-	}
-	
 	public String getPassword() {
 		return password;
 	}

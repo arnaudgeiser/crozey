@@ -24,6 +24,7 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 
 import ch.waterbead.models.User;
 import ch.waterbead.repositories.UserRepository;
+import ch.waterbead.util.Response;
 
 @RestController()
 @RequestMapping("/authentication")
@@ -34,7 +35,7 @@ public class AuthenticationController {
 	private UserRepository userRepository;
 	
 	@RequestMapping(value="/login",method=RequestMethod.POST)
-	public void login(@RequestBody ObjectNode node, HttpServletRequest request, HttpServletResponse response) throws IOException {
+	public Response login(@RequestBody ObjectNode node, HttpServletRequest request, HttpServletResponse response) throws IOException {
 		request.getSession(true);
 		String username = node.get("username").asText();
 		String password = node.get("password").asText();
@@ -48,15 +49,17 @@ public class AuthenticationController {
 		catch(AuthenticationException e) {
 			response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Je crois pas, non !");
 		}		
+		return Response.ok();
 	}
 	
 	@RequestMapping(value="/logout")
-	public void logout(HttpServletRequest request) throws ServletException {
+	public Response logout(HttpServletRequest request) throws ServletException {
 		SecurityContextHolder.clearContext();
 		HttpSession session = request.getSession(false);
         if (session != null) {
             session.invalidate();
         }
+        return Response.ok();
 	}
 	
 	@RequestMapping(value="/logged",produces="application/json")

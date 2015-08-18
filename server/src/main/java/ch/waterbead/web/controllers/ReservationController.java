@@ -1,13 +1,14 @@
 package ch.waterbead.web.controllers;
 
-import java.security.Security;
 import java.time.LocalDate;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.websocket.server.PathParam;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -20,6 +21,8 @@ import ch.waterbead.models.Reservation;
 import ch.waterbead.models.User;
 import ch.waterbead.repositories.ReservationRepository;
 import ch.waterbead.services.ReservationService;
+import ch.waterbead.util.Response;
+import sun.util.resources.cldr.ne.CurrencyNames_ne;
 
 @RestController
 @RequestMapping("/reservations")
@@ -45,27 +48,39 @@ public class ReservationController {
 		return reservation;
 	}
 	
-	@RequestMapping(consumes="application/json",produces="application/json",method=RequestMethod.PUT)
-	public void update(@RequestBody Reservation reservation) {
+	@RequestMapping(value="/{id}",consumes="application/json",produces="application/json",method=RequestMethod.PUT)
+	public Response update(@RequestBody Reservation reservation) {
 		User user = getCurrentUser();
 		reservation.setUser(user);
-		if(hasRightToModify(reservation)) {
+		if(hasRightToModify(reservation) && !isReservationsNotExist(reservation.getFrom(), reservation.getTo(), reservation)) {
 			reservationService.update(reservation);
 		}
+		return Response.ok();
 	}
 	
 
-	@RequestMapping(consumes="application/json",produces="application/json",method=RequestMethod.DELETE)
-	public void delete(@RequestBody Reservation reservation) {
+	@RequestMapping(value="/{id}",method=RequestMethod.DELETE)
+	public Response delete(@PathVariable(value="id") long id) {
+		Reservation reservation = reservationRepository.findOne(id);
 		User user = getCurrentUser();
 		reservation.setUser(user);
 		if(hasRightToModify(reservation)) {
 			reservationService.delete(reservation);
 		}
+		return Response.ok();
 	}
 	
 	private boolean isReservationsNotExist(LocalDate from, LocalDate to) {
 		return reservationRepository.findByMonthAndYear(from, to).size() == 0;
+	}
+	
+	private boolean isReservationsNotExist(LocalDate from, LocalDate to,Reservation currentReservation) {
+		List<Reservation> reservations = reservationRepository.findByMonthAndYear(from, to);
+		if(reservations.size() == 0) return false;
+		if(reservations.size() > 1) return true;
+		if(reservations.get(0).equals(currentReservation)) return false;
+		return true;
+		
 	}
 	
 	private boolean hasRightToModify(Reservation reservation) {

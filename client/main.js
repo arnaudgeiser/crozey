@@ -133,11 +133,9 @@ define([
 
 	$connexion.click(function() {
 		var user = {
-			username : $username.val(),
-			password : $password.val()
+			username : $('#username').val(),
+			password : $('#password').val()
 		};
-
-		console.log(JSON.stringify(user));
 
 		$.ajax({
 			url :  LOGIN_URL,
