@@ -26,9 +26,10 @@ define([
             'click #supprimer' : 'doSuppression'
         },
 
-        el: '#divEvent',
+        el: '#modals',
 
         initialize: function () {
+            var that = this;
             this.render();
             this.modalAddEvent = $('#modalAddEvent');
             this.id = $('#id');
@@ -38,6 +39,9 @@ define([
             this.private = $('#private');
             this.reserver = $('#reserver');
             this.supprimer = $('#supprimer');
+            this.modalAddEvent.on('hidden.bs.modal', function() {
+                that.remove();
+            });
 
         },
         openForAdd : function(date) {
@@ -90,6 +94,7 @@ define([
             eventModel.save(null,{
                 success : function() {
                     that.trigger('change');
+                    that.modalAddEvent.modal('hide');
                 }
             });
         },
@@ -99,8 +104,14 @@ define([
             eventModel.destroy({
                 success : function() {
                     that.trigger('change')
+                    that.modalAddEvent.modal('hide');
                 }
             });
+        },
+        remove : function() {
+                this.$el.empty().off();
+                this.stopListening();
+                return this;
         }
     });
 

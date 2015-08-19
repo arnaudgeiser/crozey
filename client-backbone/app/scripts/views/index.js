@@ -37,12 +37,8 @@ define([
                 this.render();
                 this.login = $('#login');
                 this.logout = $('#logout');
-                this.eventView = new EventView();
-                this.loginView = new LoginView();
-                this.newAccountView = new NewAccountView();
                 this.calendar = $('#calendar');
                 this.initCalendar();
-                this.initEvents();
                 this.checkCredentials();
             },
 
@@ -62,20 +58,19 @@ define([
                         element.empty().append(html);
                     },
                     dayClick : function(date, jsEvent, view) {
+                        that.eventView = new EventView();
                         that.eventView.openForAdd(date);
+                        that.listenTo(that.eventView, 'change', that.refreshEvents)
                     },
                     eventClick : function(event, jsEvent, view) {
+                        that.eventView = new EventView();
                         that.eventView.openForEdit(event);
+                        that.listenTo(that.eventView, 'change', that.refreshEvents)
                     }
                 });
             },
             render: function () {
                 this.$el.html(this.template());
-            },
-
-            initEvents: function() {
-                this.listenTo(this.loginView,'logged',this.loggedCallback);
-                this.listenTo(this.eventView, 'change', this.refreshEvents)
             },
             checkCredentials : function() {
                 var that = this;
@@ -87,7 +82,6 @@ define([
                 });                
             },
             loggedCallback : function(logged) {
-                console.log("name : " + logged);
                 if(logged) {
                     this.login.hide();
                     this.logout.show();
@@ -97,6 +91,8 @@ define([
                 }
             },
             openLoginDialog : function() {
+                this.loginView = new LoginView();
+                this.listenTo(this.loginView,'logged',this.loggedCallback);
                 this.loginView.open();
             },
             unlog : function() {
@@ -114,7 +110,7 @@ define([
                 this.calendar.fullCalendar('refetchEvents');
             },
             openNewAccountDialog : function() {
-                console.log(this.newAccountView);
+                this.newAccountView = new NewAccountView();
                 this.newAccountView.open();
             }
         });

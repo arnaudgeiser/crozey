@@ -23,11 +23,15 @@ define([
             "click #connexion" : "connection"
         },
 
-        el : "#divLogin",
+        el : "#modals",
 
         initialize: function () {
+            var that = this;
             this.render();
             this.modalLogin = $('#modalLogin');
+            this.modalLogin.on('hidden.bs.modal', function() {
+                this.remove();
+            })
         },
 
         render: function () {
@@ -59,6 +63,11 @@ define([
         },
         close : function() {
             this.modalLogin.modal('hide');
+        },
+        remove : function() {
+            this.$el.empty().off();
+            this.stopListening();
+            return this;
         }
     });
 

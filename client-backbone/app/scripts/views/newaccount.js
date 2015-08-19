@@ -22,22 +22,25 @@ define([
             'click #createNewAccount' : 'doCreate'
         },
 
-        el : '#divNewAccount',
+        el : '#modals',
 
         initialize: function () {
             this.render();
         },
 
         render: function () {
+            var that = this;
             this.$el.html(this.template());
             this.modalNewAccount = $('#modalNewAccount');
             this.firstNameLastName = $('#firstNameLastName');
             this.username = $('#username');
             this.password = $('#password');
+            this.modalNewAccount.on('hidden.bs.modal', function() {
+                that.remove();
+            });
         },
 
         open: function() {
-            console.log(this.modalNewAccount);
             this.modalNewAccount.modal();
         },
 
@@ -51,7 +54,13 @@ define([
         doCreate : function() {
             var user = new UserModel(this.serialize());
             user.save();
-        }
+            this.modalNewAccount.modal('hide');
+        },
+        remove : function() {
+                this.$el.empty().off();
+                this.stopListening();
+                return this;
+            }
     });
 
     return NewaccountView;
