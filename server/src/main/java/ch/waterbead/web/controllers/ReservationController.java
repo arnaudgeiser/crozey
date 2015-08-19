@@ -32,7 +32,7 @@ public class ReservationController {
 	@Autowired ReservationRepository reservationRepository;
 	
 	@RequestMapping("/feed")
-	public List<Event> byMonth(@RequestParam("start") String start, @RequestParam("end") String end) {
+	public List<Event> feed(@RequestParam("start") String start, @RequestParam("end") String end) {
 		LocalDate startDate = LocalDate.parse(start);
 		LocalDate endDate = LocalDate.parse(end);
 		List<Reservation> reservations = reservationRepository.findByMonthAndYear(startDate, endDate);
@@ -40,59 +40,21 @@ public class ReservationController {
 	}
 	
 	@RequestMapping(consumes="application/json",produces="application/json",method=RequestMethod.POST)
-	public Reservation add(@RequestBody Reservation reservation, HttpServletRequest req) {
-		User user = (User)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-		reservation.setUser(user);
-		if(isReservationsNotExist(reservation.getFrom(), reservation.getTo()))
-			reservationService.add(reservation);
-		return reservation;
+	public Response add(@RequestBody Reservation reservation, HttpServletRequest req) {
+		reservationService.add(reservation);
+		return Response.ok();
 	}
 	
 	@RequestMapping(value="/{id}",consumes="application/json",produces="application/json",method=RequestMethod.PUT)
 	public Response update(@RequestBody Reservation reservation) {
-		User user = getCurrentUser();
-		reservation.setUser(user);
-		if(hasRightToModify(reservation) && !isReservationsNotExist(reservation.getFrom(), reservation.getTo(), reservation)) {
-			reservationService.update(reservation);
-		}
+		reservationService.update(reservation);
 		return Response.ok();
 	}
 	
 
 	@RequestMapping(value="/{id}",method=RequestMethod.DELETE)
 	public Response delete(@PathVariable(value="id") long id) {
-		Reservation reservation = reservationRepository.findOne(id);
-		User user = getCurrentUser();
-		reservation.setUser(user);
-		if(hasRightToModify(reservation)) {
-			reservationService.delete(reservation);
-		}
+		reservationService.deleteById(id);
 		return Response.ok();
-	}
-	
-	private boolean isReservationsNotExist(LocalDate from, LocalDate to) {
-		return reservationRepository.findByMonthAndYear(from, to).size() == 0;
-	}
-	
-	private boolean isReservationsNotExist(LocalDate from, LocalDate to,Reservation currentReservation) {
-		List<Reservation> reservations = reservationRepository.findByMonthAndYear(from, to);
-		if(reservations.size() == 0) return false;
-		if(reservations.size() > 1) return true;
-		if(reservations.get(0).equals(currentReservation)) return false;
-		return true;
-		
-	}
-	
-	private boolean hasRightToModify(Reservation reservation) {
-		User user = getCurrentUser();
-		Reservation reservationExistante = reservationRepository.findOne(reservation.getId());
-		if(reservationExistante.getUser().equals(user)) {
-			return true;
-		}
-		return false;
-	}
-	
-	private User getCurrentUser() {
-		return (User)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 	}
 }

@@ -52,8 +52,14 @@ define([
             };
         },
         doCreate : function() {
+            var that = this;
             var user = new UserModel(this.serialize());
-            user.save();
+            user.save(null, {
+                success : function() {
+                    that.trigger('logged',[true]);
+                    alert('Ton compte a bien été créé');
+                }
+            });
             this.modalNewAccount.modal('hide');
         },
         remove : function() {

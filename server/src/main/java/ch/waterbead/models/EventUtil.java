@@ -11,7 +11,7 @@ public class EventUtil {
 	public static List<Event> toEvents(List<Reservation> reservations) {
 		List<Event> events = new ArrayList<>();
 		reservations.forEach(r -> {
-			Event event = new Event(r.getId(), r.getTitle(), r.isPrivacy()?PRIVATE:NON_PRIVATE , r.getPeriod().getFrom().toString(), r.getPeriod().getTo().plusDays(1).toString(), r.getUser().getUsername());
+			Event event = new Event(r.getId(), r.getTitle(), r.isPrivacy()?PRIVATE:NON_PRIVATE , r.getPeriod().getFrom().toString(), r.getPeriod().getTo().plusDays(1).toString(), r.getUser().getFirstNameLastName());
 			events.add(event);
 		});
 		return events;

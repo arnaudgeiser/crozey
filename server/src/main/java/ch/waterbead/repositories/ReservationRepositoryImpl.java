@@ -15,6 +15,7 @@ public class ReservationRepositoryImpl implements ReservationRepositoryCustom {
     private EntityManager em;
 	
 	private static final String QUERY_RESERVATIONS = "SELECT r FROM Reservation r WHERE r.period.from >= :startDate AND r.period.to <= :endDate";
+	private static final String QUERY_RESERVATIONS_CHEVAUCHANTES = "SELECT r FROM Reservation r WHERE r.period.from <= :startDate AND r.period.to >= :endDate";
 	
 	private static final String PARAM_START_DATE = "startDate";
 	private static final String PARAM_END_DATE = "endDate";
@@ -37,6 +38,15 @@ public class ReservationRepositoryImpl implements ReservationRepositoryCustom {
 		return em.createQuery(QUERY_RESERVATIONS)
 				.setParameter(PARAM_START_DATE, start)
 				.setParameter(PARAM_END_DATE, end)
+				.getResultList();
+	}
+	
+	@Override
+	@SuppressWarnings("unchecked")
+	public List<Reservation> findReservationsChevauchantes(Reservation reservation) {
+		return em.createQuery(QUERY_RESERVATIONS_CHEVAUCHANTES)
+				.setParameter(PARAM_START_DATE, reservation.getFrom())
+				.setParameter(PARAM_END_DATE, reservation.getTo())
 				.getResultList();
 	}
 }

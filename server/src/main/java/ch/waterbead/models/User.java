@@ -24,6 +24,7 @@ public class User implements UserDetails {
 	@Column(name="name")
 	private String firstNameLastName;
 	private String password;
+	@Column(unique=true)
 	private String username;
 	
 	public String getFirstNameLastName() {

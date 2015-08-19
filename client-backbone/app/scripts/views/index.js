@@ -10,6 +10,7 @@ define([
     'views/event',
     'views/newaccount',
     'fullcalendar',
+    'fullcalendar_lang_all',
     'moment'
     ], function ($, _,Boostrap, Backbone, JST, LoginView, EventView, NewAccountView) {
         'use strict';
@@ -46,7 +47,7 @@ define([
                 var that = this;
                 this.calendar.fullCalendar({
                     fixedWeekCount: false,
-                    contentHeight: 500,
+                    contentHeight: 450,
                     lazyFetching: false,
                     defaultDate: $.fullCalendar.moment(currentYear+'-12-01'),
                     lang : 'fr',
@@ -111,6 +112,7 @@ define([
             },
             openNewAccountDialog : function() {
                 this.newAccountView = new NewAccountView();
+                this.listenTo(this.newAccountView,'logged',this.loggedCallback);
                 this.newAccountView.open();
             }
         });

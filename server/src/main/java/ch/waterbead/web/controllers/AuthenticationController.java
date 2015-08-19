@@ -24,6 +24,7 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 
 import ch.waterbead.models.User;
 import ch.waterbead.repositories.UserRepository;
+import ch.waterbead.services.AuthentificationService;
 import ch.waterbead.util.Response;
 
 @RestController()
@@ -33,22 +34,17 @@ public class AuthenticationController {
 	private AuthenticationManager authenticationManager;
 	@Autowired
 	private UserRepository userRepository;
+	@Autowired
+	private AuthentificationService authentificationService;
 	
 	@RequestMapping(value="/login",method=RequestMethod.POST)
 	public Response login(@RequestBody ObjectNode node, HttpServletRequest request, HttpServletResponse response) throws IOException {
-		request.getSession(true);
 		String username = node.get("username").asText();
 		String password = node.get("password").asText();
-
-		Authentication requete = new UsernamePasswordAuthenticationToken(username, password);
-		try {
-			Authentication result = authenticationManager.authenticate(requete);
-			SecurityContextHolder.getContext().setAuthentication(result);
-			request.getSession().setAttribute(HttpSessionSecurityContextRepository.SPRING_SECURITY_CONTEXT_KEY, SecurityContextHolder.getContext());
-		}
-		catch(AuthenticationException e) {
+		
+		if(!authentificationService.logging(username, password, request.getSession(true))) {
 			response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Je crois pas, non !");
-		}		
+		}
 		return Response.ok();
 	}
 	
@@ -74,7 +70,9 @@ public class AuthenticationController {
 	}
 	
 	@RequestMapping(value="/newaccount", method=RequestMethod.POST) 
-	public void createAccount(@RequestBody User user) {
+	public Response createAccount(@RequestBody User user, HttpServletRequest request) {
 		userRepository.save(user);
+		authentificationService.logging(user.getUsername(), user.getPassword(), request.getSession(true));
+		return Response.ok();
 	}
 }
