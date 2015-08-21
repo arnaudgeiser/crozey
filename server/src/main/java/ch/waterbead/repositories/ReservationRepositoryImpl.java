@@ -15,7 +15,7 @@ public class ReservationRepositoryImpl implements ReservationRepositoryCustom {
     private EntityManager em;
 	
 	private static final String QUERY_RESERVATIONS = "SELECT r FROM Reservation r WHERE r.period.from >= :startDate AND r.period.to <= :endDate";
-	private static final String QUERY_RESERVATIONS_CHEVAUCHANTES = "SELECT r FROM Reservation r WHERE r.period.from <= :startDate AND r.period.to >= :endDate";
+	private static final String QUERY_RESERVATIONS_CHEVAUCHANTES = "SELECT r FROM Reservation r WHERE (r.period.from <= :startDate AND r.period.to >= :endDate) OR (:startDate <= r.period.from AND :endDate >= r.period.from) OR (:startDate <= r.period.to AND :endDate >= r.period.to)";
 	
 	private static final String PARAM_START_DATE = "startDate";
 	private static final String PARAM_END_DATE = "endDate";

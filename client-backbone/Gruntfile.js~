@@ -72,7 +72,7 @@ module.exports = function (grunt) {
 	uglify: {
 		dist: {
 			files: {
-				'dist/app.min.js' : ['dist/main.js']
+				'dist/main.min.js' : ['dist/main.js']
 			}
 		}
 	},
@@ -176,14 +176,12 @@ module.exports = function (grunt) {
             dist: {
                 // Options: https://github.com/jrburke/r.js/blob/master/build/example.build.js
                 options: {
-		    name: 'main',
-		    baseUrl: '<%= yeoman.app %>/scripts',
-		    optimize: 'none',
 		    mainConfigFile: '<%= yeoman.app %>/scripts/app-build.js',
+		    out: 'dist/main.min.js',
 		    preserveLicenseComments: false,
 		    useStrict: true,
 		    wrap: true,
-		    out: 'dist/app.min.js'
+		    out: 'dist/main.min.js'
                 }
             }
         },
@@ -258,8 +256,8 @@ module.exports = function (grunt) {
                     src: '<node_modules/apache-server-configs/dist/.htaccess',
                     dest: '<%= yeoman.dist %>/.htaccess'
                 }, {
-		          src: 'app/bower_components/requirejs/require.js',
-		          dest: '<%= yeoman.dist %>/require.js'
+		    src: 'app/index_production.html',
+		    dest: '<%= yeoman.dist %>/index23.html'
 		}]
             }
         },
@@ -290,26 +288,10 @@ module.exports = function (grunt) {
                     ]
                 }
             }
-        },
-        'string-replace': {
-            dist: {
-                options: {
-                    replacements : [
-                    {
-                        pattern: '<script src="../bower_components/requirejs/require.js"></script>',
-                        replacement: '<script src="require.js"></script>'
-                    }
-                    ]
-                },
-                files : [
-                    {src: '<%= yeoman.dist %>/index.html', dest: '<%= yeoman.dist %>/index2.html'}
-                ]
-            }
         }
     });
 
     grunt.loadNpmTasks('grunt-processhtml');
-    grunt.loadNpmTasks('grunt-string-replace');
 
     grunt.registerTask('createDefaultTemplate', function () {
         grunt.file.write('.tmp/scripts/templates.js', 'this.JST = this.JST || {};');
@@ -379,7 +361,6 @@ module.exports = function (grunt) {
         'htmlmin',
         'cssmin',
         //'uglify',
-        //'string-replace',
         'copy',
         'rev',
         'usemin'

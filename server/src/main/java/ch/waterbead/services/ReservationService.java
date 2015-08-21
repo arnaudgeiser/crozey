@@ -1,6 +1,5 @@
 package ch.waterbead.services;
 
-import java.time.LocalDate;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,7 +9,6 @@ import org.springframework.stereotype.Service;
 import ch.waterbead.models.Reservation;
 import ch.waterbead.models.User;
 import ch.waterbead.repositories.ReservationRepository;
-import ch.waterbead.util.Response;
 
 @Service
 public class ReservationService {
