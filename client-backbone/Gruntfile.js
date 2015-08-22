@@ -213,9 +213,11 @@ module.exports = function (grunt) {
         cssmin: {
             dist: {
                 files: {
-                    '<%= yeoman.dist %>/styles/main.css': [
+                    '<%= yeoman.dist %>/styles/2main.css': [
                         '.tmp/styles/{,*/}*.css',
-                        '<%= yeoman.app %>/styles/{,*/}*.css'
+                        '<%= yeoman.app %>/styles/{,*/}*.css',
+			'<%= yeoman.app %>/bower_components/fullcalendar/dist/fullcalendar.min.css',
+			'<%= yeoman.app %>/bower_components/bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css'
                     ]
                 }
             }
@@ -302,7 +304,7 @@ module.exports = function (grunt) {
                     ]
                 },
                 files : [
-                    {src: '<%= yeoman.dist %>/index.html', dest: '<%= yeoman.dist %>/index2.html'}
+                    {src: '<%= yeoman.dist %>/index.html', dest: '<%= yeoman.dist %>/index.html'}
                 ]
             }
         }

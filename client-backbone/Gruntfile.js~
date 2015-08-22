@@ -72,7 +72,7 @@ module.exports = function (grunt) {
 	uglify: {
 		dist: {
 			files: {
-				'dist/main.min.js' : ['dist/main.js']
+				'dist/app.min.js' : ['dist/main.js']
 			}
 		}
 	},
@@ -176,12 +176,14 @@ module.exports = function (grunt) {
             dist: {
                 // Options: https://github.com/jrburke/r.js/blob/master/build/example.build.js
                 options: {
+		    name: 'main',
+		    baseUrl: '<%= yeoman.app %>/scripts',
+		    optimize: 'none',
 		    mainConfigFile: '<%= yeoman.app %>/scripts/app-build.js',
-		    out: 'dist/main.min.js',
 		    preserveLicenseComments: false,
 		    useStrict: true,
 		    wrap: true,
-		    out: 'dist/main.min.js'
+		    out: 'dist/app.min.js'
                 }
             }
         },
@@ -211,9 +213,11 @@ module.exports = function (grunt) {
         cssmin: {
             dist: {
                 files: {
-                    '<%= yeoman.dist %>/styles/main.css': [
+                    '<%= yeoman.dist %>/styles/2main.css': [
                         '.tmp/styles/{,*/}*.css',
-                        '<%= yeoman.app %>/styles/{,*/}*.css'
+                        '<%= yeoman.app %>/styles/{,*/}*.css',
+			'<%= yeoman.app %>/bower_components/fullcalendar/dist/fullcalendar.min.css',
+			'<%= yeoman.app %>/bower_components/bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css
                     ]
                 }
             }
@@ -256,8 +260,8 @@ module.exports = function (grunt) {
                     src: '<node_modules/apache-server-configs/dist/.htaccess',
                     dest: '<%= yeoman.dist %>/.htaccess'
                 }, {
-		    src: 'app/index_production.html',
-		    dest: '<%= yeoman.dist %>/index23.html'
+		          src: 'app/bower_components/requirejs/require.js',
+		          dest: '<%= yeoman.dist %>/require.js'
 		}]
             }
         },
@@ -288,10 +292,26 @@ module.exports = function (grunt) {
                     ]
                 }
             }
+        },
+        'string-replace': {
+            dist: {
+                options: {
+                    replacements : [
+                    {
+                        pattern: '<script src="../bower_components/requirejs/require.js"></script>',
+                        replacement: '<script src="require.js"></script>'
+                    }
+                    ]
+                },
+                files : [
+                    {src: '<%= yeoman.dist %>/index.html', dest: '<%= yeoman.dist %>/index.html'}
+                ]
+            }
         }
     });
 
     grunt.loadNpmTasks('grunt-processhtml');
+    grunt.loadNpmTasks('grunt-string-replace');
 
     grunt.registerTask('createDefaultTemplate', function () {
         grunt.file.write('.tmp/scripts/templates.js', 'this.JST = this.JST || {};');
@@ -361,6 +381,7 @@ module.exports = function (grunt) {
         'htmlmin',
         'cssmin',
         //'uglify',
+        //'string-replace',
         'copy',
         'rev',
         'usemin'
