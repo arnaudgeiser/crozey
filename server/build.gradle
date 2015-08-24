@@ -20,7 +20,6 @@ apply plugin: 'com.moowork.node'
 
 jar {
     baseName = 'chalets.jar'
-    version =  '0.1.0'
 }
 
 repositories {
@@ -84,7 +83,7 @@ grunt {
 
 node {
     // Version of node to use.
-    version = '0.10.22'
+    version = '0.12.7'
 
 	nodeModulesDir = file('../client-backbone/')
 	workDir = file('../client-backbone/')
