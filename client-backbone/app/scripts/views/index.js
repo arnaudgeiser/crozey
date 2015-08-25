@@ -14,7 +14,7 @@ define([
     'moment'
     ], function ($, _,Boostrap, Backbone, JST, LoginView, EventView, NewAccountView) {
         'use strict';
-        var FEED_URL = 'http://localhost:8080/reservations/feed';
+        var FEED_URL = config.url + '/reservations/feed';
 
         var currentYear = new Date().getFullYear();
         var IndexView = Backbone.View.extend({
@@ -76,7 +76,7 @@ define([
             checkCredentials : function() {
                 var that = this;
                 $.ajax({
-                    url : 'http://localhost:8080/authentication/logged',
+                    url : config.url + 'authentication/logged',
                     success : function(logged) {
                         that.loggedCallback(logged);
                     }
@@ -99,7 +99,7 @@ define([
             unlog : function() {
                 var that = this;
                 $.ajax({
-                    url : 'http://localhost:8080/authentication/logout',
+                    url : config.url + '/authentication/logout',
                     method : 'POST',
                     success : function() {
                         that.loggedCallback(false);

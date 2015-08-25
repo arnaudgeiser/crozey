@@ -1,5 +1,8 @@
 version '0.0.1'
 
+def clientPath = '../client-backbone/';
+def clientDistPath = clientPath + 'dist';
+
 buildscript {
     repositories {
         mavenCentral()
@@ -60,7 +63,7 @@ processResources {
 
 task customDist(type: Zip, dependsOn : bootRepackage) {
 	from(jar.outputs.files)
-	from('../client-backbone/dist') {
+	from(clientDistPath) {
 		into('client')
 	}
 	baseName 'crozey'
@@ -77,16 +80,14 @@ grunt_build.dependsOn(npmInstall)
 grunt_build.dependsOn(installGrunt)
 
 grunt {
-	workDir = file('../client-backbone/')
+	workDir = file(clientPath)
 	bufferOutput = false
 }
 
 node {
-    // Version of node to use.
     version = '0.12.7'
 
-	nodeModulesDir = file('../client-backbone/')
-	workDir = file('../client-backbone/')
-    // Enabled the automatic download. False is the default (for now).
+	nodeModulesDir = file(clientPath)
+	workDir = file(clientPath)
     download = true
 }

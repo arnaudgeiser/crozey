@@ -262,7 +262,10 @@ module.exports = function (grunt) {
                 }, {
 		          src: 'app/bower_components/requirejs/require.js',
 		          dest: '<%= yeoman.dist %>/require.js'
-		}]
+		        }, {
+                    src: 'app/config.js',
+                    dest: '<%= yeoman.dist %>/config.js'
+                }]
             }
         },
         bower: {

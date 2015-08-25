@@ -7,7 +7,7 @@ define([
     'use strict';
 
     var UserModel = Backbone.Model.extend({
-        urlRoot : 'http://localhost:8080/authentication/newaccount',
+        urlRoot : config.url + '/authentication/newaccount',
 
         initialize: function() {
         },

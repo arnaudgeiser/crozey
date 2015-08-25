@@ -7,7 +7,7 @@ define([
     'use strict';
 
     var EventModel = Backbone.Model.extend({
-        urlRoot: 'http://localhost:8080/reservations',
+        urlRoot: config.url + '/reservations',
 
         initialize: function() {
         },

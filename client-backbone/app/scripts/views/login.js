@@ -8,7 +8,7 @@ define([
 ], function ($, _, Backbone, JST) {
     'use strict';
 
-    var LOGIN_URL = 'http://localhost:8080/authentication/login';
+    var LOGIN_URL = config.url + '/authentication/login';
 
     var LoginView = Backbone.View.extend({
         template: JST['app/scripts/templates/login.ejs'],
