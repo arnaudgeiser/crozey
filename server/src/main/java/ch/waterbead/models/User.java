@@ -14,17 +14,18 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 @Entity
-@Table(name="users")
+@Table(name="UTILISATEURS")
 public class User implements UserDetails {
 	private static final long serialVersionUID = -4124437701361743585L;
 	
 	@Id
 	@GeneratedValue
 	private Long id;
-	@Column(name="name")
+	@Column(name="NOM_PRENOM")
 	private String firstNameLastName;
+	@Column(name="MOT_DE_PASSE")
 	private String password;
-	@Column(unique=true)
+	@Column(name="UTILISATEUR",unique=true)
 	private String username;
 	
 	public String getFirstNameLastName() {

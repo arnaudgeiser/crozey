@@ -1,16 +1,19 @@
 package ch.waterbead.models;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
-@Table(name="chalets")
+@Table(name="CHALETS")
 public class Chalet {
 	@Id
 	@GeneratedValue
+	@Column(name="ID")
 	private Long id;
+	@Column(name="NOM")
 	private String name;
 	
 	public Long getId() {

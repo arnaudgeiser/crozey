@@ -24,8 +24,6 @@ public class ReservationService {
 	}
 	
 	public void update(Reservation reservation) {
-		User user = getCurrentUser();
-		reservation.setUser(user);
 		if(hasRightToModify(reservation) && !isReservationsNotExistForUpdate(reservation)) {
 			reservationRepository.saveAndFlush(reservation);
 		}
@@ -33,8 +31,6 @@ public class ReservationService {
 	
 	public void deleteById(Long id) {
 		Reservation reservation = reservationRepository.findOne(id);
-		User user = getCurrentUser();
-		reservation.setUser(user);
 		if(hasRightToModify(reservation)) {
 			reservationRepository.delete(reservation);
 		}

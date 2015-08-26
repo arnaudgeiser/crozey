@@ -15,11 +15,11 @@ import ch.waterbead.converters.JsonDateSerializer;
 
 @Embeddable
 public class ReservationPeriod {
-	@Column(name="startDate",columnDefinition="DATE")
+	@Column(name="DATE_DEBUT",columnDefinition="DATE")
 	@JsonSerialize(using = JsonDateSerializer.class)
 	@JsonDeserialize(using = JsonDateDeserializer.class)
 	private LocalDate from;
-	@Column(name="endDate",columnDefinition="DATE")
+	@Column(name="DATE_FIN",columnDefinition="DATE")
 	@JsonSerialize(using = JsonDateSerializer.class)
 	@JsonDeserialize(using = JsonDateDeserializer.class)	
 	private LocalDate to;

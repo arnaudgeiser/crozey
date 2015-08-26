@@ -2,6 +2,7 @@ package ch.waterbead.models;
 
 import java.time.LocalDate;
 
+import javax.persistence.Column;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -14,16 +15,19 @@ import javax.persistence.Table;
  *
  */
 @Entity
-@Table(name="reservations")
+@Table(name="RESERVATIONS")
 public class Reservation {
 	@Id
 	@GeneratedValue
+	@Column(name="ID")
 	private Long id;
+	@Column(name="TITRE")
 	private String title;
 	@Embedded
 	private ReservationPeriod period;
 	@ManyToOne
 	private User user;
+	@Column(name="PRIVE")
 	private boolean privacy;
 	
 	public Long getId() {
