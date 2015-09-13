@@ -76,6 +76,8 @@ artifacts {
 uploadArchives.dependsOn(customDist)
 uploadArchives.dependsOn(grunt_build)
 
+customDist.dependsOn(grunt_build)
+
 grunt_build.dependsOn(npmInstall)
 grunt_build.dependsOn(installGrunt)
 

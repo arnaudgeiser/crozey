@@ -1,2 +1,2 @@
-insert into utilisateurs (ID,NOM_PRENOM, MOT_DE_PASSE, UTILISATEUR) values (1,'Arnaud Geiser', '$2a$10$PN5H6p0PQRjo6AlVEnAD9O2jjIv53m1ZIjBFbaA5j2QmazR1Y0SgW', 'arnaud');
-insert into utilisateurs (ID, NOM_PRENOM, MOT_DE_PASSE, UTILISATEUR) values (2,'Sophie Wälti', '$2a$10$PN5H6p0PQRjo6AlVEnAD9O2jjIv53m1ZIjBFbaA5j2QmazR1Y0SgW', 'sophie');
+insert into UTILISATEURS (ID,NOM_PRENOM, MOT_DE_PASSE, UTILISATEUR) values (1,'Arnaud Geiser', '$2a$10$PN5H6p0PQRjo6AlVEnAD9O2jjIv53m1ZIjBFbaA5j2QmazR1Y0SgW', 'arnaud');
+insert into UTILISATEURS (ID, NOM_PRENOM, MOT_DE_PASSE, UTILISATEUR) values (2,'Sophie Wälti', '$2a$10$PN5H6p0PQRjo6AlVEnAD9O2jjIv53m1ZIjBFbaA5j2QmazR1Y0SgW', 'sophie');

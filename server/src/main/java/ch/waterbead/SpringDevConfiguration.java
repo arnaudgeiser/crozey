@@ -53,10 +53,5 @@ public class SpringDevConfiguration {
 		transactionManager.setDataSource(dataSource());
 		return transactionManager;
 	}
-	
-	@Bean
-	public UserDetailsService UserDetailsService() {
-		return new CustomUserDetailsService();
-	}
 }
 

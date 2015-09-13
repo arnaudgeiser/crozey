@@ -76,7 +76,7 @@ define([
             checkCredentials : function() {
                 var that = this;
                 $.ajax({
-                    url : config.url + 'authentication/logged',
+                    url : config.url + '/authentication/logged',
                     success : function(logged) {
                         that.loggedCallback(logged);
                     }

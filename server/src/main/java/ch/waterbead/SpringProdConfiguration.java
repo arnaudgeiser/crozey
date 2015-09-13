@@ -49,9 +49,4 @@ public class SpringProdConfiguration {
 		transactionManager.setDataSource(dataSource);
 		return transactionManager;
 	}
-		
-	@Bean
-	public UserDetailsService UserDetailsService() {
-		return new CustomUserDetailsService();
-	}
 }
