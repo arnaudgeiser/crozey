@@ -24,14 +24,17 @@ public class ReservationService {
 	}
 	
 	public void update(Reservation reservation) {
-		if(hasRightToModify(reservation) && !isReservationsNotExistForUpdate(reservation)) {
+		User currentUser = getCurrentUser();
+		Reservation reservationExistante = reservationRepository.findOne(reservation.getId());
+		if(hasRightToEdit(reservationExistante, currentUser) && !isReservationsNotExistForUpdate(reservation)) {
+			reservation.setUser(currentUser);
 			reservationRepository.saveAndFlush(reservation);
 		}
 	}
 	
 	public void deleteById(Long id) {
 		Reservation reservation = reservationRepository.findOne(id);
-		if(hasRightToModify(reservation)) {
+		if(hasRightToDelete(reservation)) {
 			reservationRepository.delete(reservation);
 		}
 	}
@@ -48,10 +51,12 @@ public class ReservationService {
 		return true;
 	}
 	
-	private boolean hasRightToModify(Reservation reservation) {
-		User user = getCurrentUser();
-		Reservation reservationExistante = reservationRepository.findOne(reservation.getId());
-		if(reservationExistante.getUser().equals(user)) {
+	private boolean hasRightToDelete(Reservation reservation) {
+		return hasRightToEdit(reservation, getCurrentUser());
+	}
+	
+	private boolean hasRightToEdit(Reservation reservation, User user) {
+		if(reservation.getUser().equals(user)) {
 			return true;
 		}
 		return false;

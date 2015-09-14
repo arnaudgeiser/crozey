@@ -55,6 +55,11 @@ define([
                         url: FEED_URL,
                     }],
                     eventRender : function(event, element, view) {
+                        if(event.private) {
+                            element.css('background-color','#FF6600');
+                            element.css('border-color','#FF6600');
+                        }
+                                
                         var html = '<b>'+event.title+'</b><br />'+event.username;
                         element.empty().append(html);
                     },

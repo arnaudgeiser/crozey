@@ -62,6 +62,7 @@ define([
             this.title.val(event.title);
             this.from.datepicker('update',start.format('DD.MM.YYYY'));
             this.to.datepicker('update', end.format('DD.MM.YYYY'));
+            this.private.prop('checked',event.private);
             this.supprimer.show();
             this.reserver.text('Modifier');
             this.modalAddEvent.modal();

@@ -3,21 +3,19 @@ package ch.waterbead.models;
 public class Event {
 	private final long id;
 	private final String title;
-	private final String color;
 	private final String start;
 	private final String end;
 	private final String username;
 	private boolean isPrivate = false;
 	private boolean allDay = true;
 	
-	public Event(long id, String title, String color, String start, String end, String username) {
-		super();
+	public Event(long id, String title, String start, String end, String username, boolean isPrivate) {
 		this.id = id;
 		this.title = title;
-		this.color = color;
 		this.start = start;
 		this.end = end;
 		this.username = username;
+		this.isPrivate = isPrivate;
 	}
 
 	public long getId() {
@@ -26,10 +24,6 @@ public class Event {
 
 	public String getTitle() {
 		return title;
-	}
-
-	public String getColor() {
-		return color;
 	}
 
 	public String getStart() {
