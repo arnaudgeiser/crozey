@@ -1,0 +1,11 @@
+Comment builder ?
+Génération d'un fichier ZIP
+
+- Copie des fichiers sur le serveur via SCP dans /var/www/html/yyyyMMddHHmmss
+- Création d'un lien symbolique dans client
+- Copie du jar par SCP dans /srv
+- Kill du processus ayant déjà lancé
+- Relancement du serveur java -jar
+
+----- A FAIRE ----
+Redéfinition de apache afin que le virtualHost pointe sur le répertoire client au lieu de HTML

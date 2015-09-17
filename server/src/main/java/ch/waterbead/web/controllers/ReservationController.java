@@ -4,8 +4,10 @@ import java.time.LocalDate;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.websocket.server.PathParam;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -16,9 +18,11 @@ import org.springframework.web.bind.annotation.RestController;
 import ch.waterbead.models.Event;
 import ch.waterbead.models.EventUtil;
 import ch.waterbead.models.Reservation;
+import ch.waterbead.models.User;
 import ch.waterbead.repositories.ReservationRepository;
 import ch.waterbead.services.ReservationService;
 import ch.waterbead.util.Response;
+import sun.util.resources.cldr.ne.CurrencyNames_ne;
 
 @RestController
 @RequestMapping("/reservations")

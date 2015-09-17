@@ -72,7 +72,7 @@ module.exports = function (grunt) {
 	uglify: {
 		dist: {
 			files: {
-				'dist/app.min.js' : ['dist/main.js']
+				'dist/app.min.js' : ['dist/app.js']
 			}
 		}
 	},
@@ -183,7 +183,7 @@ module.exports = function (grunt) {
 		    preserveLicenseComments: false,
 		    useStrict: true,
 		    wrap: true,
-		    out: 'dist/app.min.js'
+		    out: 'dist/app.js'
                 }
             }
         },
@@ -213,7 +213,7 @@ module.exports = function (grunt) {
         cssmin: {
             dist: {
                 files: {
-                    '<%= yeoman.dist %>/styles/2main.css': [
+                    '<%= yeoman.dist %>/styles/styles.css': [
                         '.tmp/styles/{,*/}*.css',
                         '<%= yeoman.app %>/styles/{,*/}*.css',
 			'<%= yeoman.app %>/bower_components/fullcalendar/dist/fullcalendar.min.css',
@@ -383,7 +383,7 @@ module.exports = function (grunt) {
         'imagemin',
         'htmlmin',
         'cssmin',
-        //'uglify',
+        'uglify',
         //'string-replace',
         'copy',
         'rev',

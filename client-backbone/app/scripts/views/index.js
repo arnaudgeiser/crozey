@@ -88,6 +88,7 @@ define([
                 });                
             },
             loggedCallback : function(logged) {
+                console.log("Is logged : " + logged);
                 if(logged) {
                     this.login.hide();
                     this.logout.show();

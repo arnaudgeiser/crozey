@@ -10,10 +10,6 @@ import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
-/**
- * @author geiser
- *
- */
 @Entity
 @Table(name="RESERVATIONS")
 public class Reservation {
