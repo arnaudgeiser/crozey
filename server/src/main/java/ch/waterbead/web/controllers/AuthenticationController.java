@@ -38,7 +38,7 @@ public class AuthenticationController {
 		String password = node.get("password").asText();
 		
 		if(!authentificationService.logging(username, password, request.getSession(true))) {
-			response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Je crois pas, non !");
+			response.sendError(HttpServletResponse.SC_BAD_REQUEST);
 		}
 		return Response.ok();
 	}

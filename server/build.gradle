@@ -12,6 +12,8 @@ buildscript {
         classpath("org.springframework.boot:spring-boot-gradle-plugin:1.2.5.RELEASE")
         classpath('com.moowork.gradle:gradle-grunt-plugin:0.10')
         classpath('com.moowork.gradle:gradle-node-plugin:0.10')
+        classpath('org.hidetake:gradle-ssh-plugin:1.1.3')
+        
     }
 }
 
@@ -19,7 +21,17 @@ apply plugin: 'java'
 apply plugin: 'eclipse'
 apply plugin: 'spring-boot'
 apply plugin: 'com.moowork.grunt'
-apply plugin: 'com.moowork.node'
+apply plugin: 'com.moowork.node'	
+apply plugin: 'org.hidetake.ssh'
+
+remotes {
+	server1 {
+		host = 'chez-mayon.ch'
+		user = 'root'
+		password = 'MarXheroes4'
+		knownHosts = allowAnyHosts
+	}
+}
 
 jar {
     baseName = 'chalets.jar'
@@ -69,7 +81,20 @@ task customDist(type: Zip, dependsOn : bootRepackage) {
 	baseName 'crozey'
 }
 
+def archivePath;
+
+task deployToProd(dependsOn : bootRepackage) << {
+	ssh.run {
+		session(remotes.server1) {
+			//put from: customDist.archivePath, into: "/root"
+			put from: "$projectDir/scripts/deploy.sh", into: "/root"
+			execute "sh deploy.sh ${customDist.archiveName}"
+		}
+	}
+}
+
 artifacts {
+	archivePath=customDist.archivePath
 	archives(customDist.archivePath)
 }
 
