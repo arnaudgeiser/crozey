@@ -29,6 +29,7 @@ define([
             var that = this;
             this.render();
             this.modalLogin = $('#modalLogin');
+            this.username = $('#username');
             this.modalLogin.on('hidden.bs.modal', function() {
                 this.remove();
             })
@@ -37,7 +38,6 @@ define([
         render: function () {
             this.$el.html(this.template());
         },
-
         connection : function() {
             var that = this;
             var user = {
@@ -49,8 +49,8 @@ define([
                 url :  LOGIN_URL,
                 method : 'POST',
                 data : JSON.stringify(user),
-                success : function() {
-                    that.trigger('logged',[true]);
+                success : function(o) {
+                    that.trigger('logged',o.logged, o.name);
                     that.close();
                 },
                 error : function(e) {
@@ -59,7 +59,11 @@ define([
             });
         },
         open : function() {
-            this.modalLogin.modal();
+            var that = this;
+            this.modalLogin.modal('show');
+            this.modalLogin.on('shown.bs.modal', function (e) {
+                that.username.focus();
+            })
         },
         close : function() {
             this.modalLogin.modal('hide');

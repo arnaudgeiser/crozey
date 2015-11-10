@@ -39,6 +39,7 @@ define([
                 this.login = $('#login');
                 this.logout = $('#logout');
                 this.calendar = $('#calendar');
+                this.newAccount = $('#newAccount');
                 this.initCalendar();
                 this.checkCredentials();
             },
@@ -82,18 +83,21 @@ define([
                 var that = this;
                 $.ajax({
                     url : config.url + '/authentication/logged',
-                    success : function(logged) {
-                        that.loggedCallback(logged);
+                    success : function(data) {
+                        that.loggedCallback(data.logged, data.name);
                     }
                 });                
             },
-            loggedCallback : function(logged) {
+            loggedCallback : function(logged, username) {
                 if(logged) {
                     this.login.hide();
                     this.logout.show();
+                    this.logout.html(username);
+                    this.newAccount.hide();
                 } else {
                     this.login.show();
                     this.logout.hide();
+                    this.newAccount.show();
                 }
             },
             openLoginDialog : function() {

@@ -21,6 +21,7 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 
 import ch.waterbead.models.User;
 import ch.waterbead.repositories.UserRepository;
+import ch.waterbead.services.AuthenticationObject;
 import ch.waterbead.services.AuthentificationService;
 import ch.waterbead.util.Response;
 
@@ -33,14 +34,16 @@ public class AuthenticationController {
 	private AuthentificationService authentificationService;
 	
 	@RequestMapping(value="/login",method=RequestMethod.POST)
-	public Response login(@RequestBody ObjectNode node, HttpServletRequest request, HttpServletResponse response) throws IOException {
+	public AuthenticationObject login(@RequestBody ObjectNode node, HttpServletRequest request, HttpServletResponse response) throws IOException {
 		String username = node.get("username").asText();
 		String password = node.get("password").asText();
 		
-		if(!authentificationService.logging(username, password, request.getSession(true))) {
+		AuthenticationObject authentication = authentificationService.logging(username, password, request.getSession(true));
+		
+		if(!authentication.isValid()) {
 			response.sendError(HttpServletResponse.SC_BAD_REQUEST);
 		}
-		return Response.ok();
+		return new AuthenticationObject(true, authentication.getName());
 	}
 	
 	@RequestMapping(value="/logout")
@@ -54,14 +57,15 @@ public class AuthenticationController {
 	}
 	
 	@RequestMapping(value="/logged",produces="application/json")
-	public boolean isLogged(HttpServletRequest request) {
+	public AuthenticationObject isLogged(HttpServletRequest request) {
 		HttpSession session = request.getSession(false);
-		if(session == null) return false;
+		if(session == null) return AuthenticationObject.NOT_AUTHENTICATED;
 		SecurityContext context = (SecurityContext) session.getAttribute(HttpSessionSecurityContextRepository.SPRING_SECURITY_CONTEXT_KEY);
-		if(context==null) return false;
+		if(context==null) return AuthenticationObject.NOT_AUTHENTICATED;
 		Authentication auth = context.getAuthentication();
-		if(auth == null) return false;
-		return true;
+		if(auth == null) return AuthenticationObject.NOT_AUTHENTICATED;
+		User user = userRepository.findByUsername(auth.getName());
+		return new AuthenticationObject(user.getFirstNameLastName());
 	}
 	
 	@RequestMapping(value="/newaccount", method=RequestMethod.POST) 

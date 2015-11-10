@@ -11,12 +11,17 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.context.HttpSessionSecurityContextRepository;
 import org.springframework.stereotype.Service;
 
+import ch.waterbead.models.User;
+import ch.waterbead.repositories.UserRepository;
+
 @Service
 public class AuthentificationService {
 	@Autowired
 	private AuthenticationManager authenticationManager;
+	@Autowired
+	private UserRepository userRepository;
 	
-	public boolean logging(String username, String password, HttpSession session) {
+	public AuthenticationObject logging(String username, String password, HttpSession session) {
 		Authentication requete = new UsernamePasswordAuthenticationToken(username, password);
 		try {
 			Authentication result = authenticationManager.authenticate(requete);
@@ -24,8 +29,9 @@ public class AuthentificationService {
 			session.setAttribute(HttpSessionSecurityContextRepository.SPRING_SECURITY_CONTEXT_KEY, SecurityContextHolder.getContext());
 		}
 		catch(AuthenticationException e) {
-			return false;
-		}		
-		return true;
+			return AuthenticationObject.NOT_AUTHENTICATED;
+		}
+		User user = userRepository.findByUsername(username);
+		return new AuthenticationObject(user.getFirstNameLastName());
 	}
 }

@@ -45,6 +45,7 @@ define([
 
         },
         openForAdd : function(date) {
+            var that = this;
             var stringMoment = date.format('DD.MM.YYYY');
             this.id.val('');
             this.from.datepicker('update',stringMoment);
@@ -52,8 +53,12 @@ define([
             this.reserver.text('Réserver');
             this.supprimer.hide();
             this.modalAddEvent.modal();
+            this.modalAddEvent.on('shown.bs.modal', function (e) {
+                that.title.focus();
+            })
         },
         openForEdit : function(event) {
+            var that = this;
             var start = moment(event.start);
             var end = moment(event.end || start);
             var end = end.subtract(1,'d');
@@ -65,6 +70,9 @@ define([
             this.private.prop('checked',event.private);
             this.supprimer.show();
             this.reserver.text('Modifier');
+            this.modalAddEvent.on('shown.bs.modal', function (e) {
+                that.reserver.focus();
+            })
             this.modalAddEvent.modal();
         },
         close : function() {

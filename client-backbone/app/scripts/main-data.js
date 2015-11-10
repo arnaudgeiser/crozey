@@ -4,6 +4,18 @@ require.config({
         bootstrap: {
             deps: ['jquery'],
             exports: 'jquery'
+        },
+        backbone: {
+            deps: ['underscore', 'jquery'],
+            exports: 'Backbone'
+        },
+        bootstrap_datepicker: {
+            deps: ['jquery'],
+            exports: '$'
+        },
+        fullcalendar_lang_all: {
+            deps: ['fullcalendar'],
+            exports: '$'
         }
     },
     paths: {

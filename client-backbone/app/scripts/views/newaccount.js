@@ -38,6 +38,9 @@ define([
             this.modalNewAccount.on('hidden.bs.modal', function() {
                 that.remove();
             });
+            this.modalNewAccount.on('shown.bs.modal', function (e) {
+                that.firstNameLastName.focus();
+            })
         },
 
         open: function() {
@@ -56,7 +59,7 @@ define([
             var user = new UserModel(this.serialize());
             user.save(null, {
                 success : function() {
-                    that.trigger('logged',[true]);
+                    that.trigger('logged',true, user.firstNameLastName);
                     alert('Ton compte a bien été créé');
                 }
             });
