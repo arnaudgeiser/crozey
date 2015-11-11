@@ -9,14 +9,13 @@ define([
     'views/login',
     'views/event',
     'views/newaccount',
+    'moment',
     'fullcalendar',
-    'fullcalendar_lang_all',
-    'moment'
-    ], function ($, _,Boostrap, Backbone, JST, LoginView, EventView, NewAccountView) {
+    'fullcalendar_lang_all'
+    ], function ($, _,Boostrap, Backbone, JST, LoginView, EventView, NewAccountView, moment) {
         'use strict';
         var FEED_URL = config.url + '/reservations/feed';
 
-        var currentYear = new Date().getFullYear();
         var IndexView = Backbone.View.extend({
             template: JST['app/scripts/templates/index.ejs'],
 
@@ -48,9 +47,9 @@ define([
                 var that = this;
                 this.calendar.fullCalendar({
                     fixedWeekCount: false,
-                    contentHeight: 450,
+                    contentHeight: that.getEventHeight(),
                     lazyFetching: false,
-                    defaultDate: $.fullCalendar.moment(currentYear+'-12-01'),
+                    defaultDate: that.getCalendarStartDate(),
                     lang : 'fr',
                     eventSources : [{
                         url: FEED_URL,
@@ -123,6 +122,23 @@ define([
                 this.newAccountView = new NewAccountView();
                 this.listenTo(this.newAccountView,'logged',this.loggedCallback);
                 this.newAccountView.open();
+            },
+            getEventHeight : function() {
+                var width = window.innerWidth; 
+                if(width < 1366) {
+                    return 350;   
+                } else {
+                    return 450;
+                }
+            },
+            getCalendarStartDate : function() {
+                var current = moment();
+                var monthNumber = current.month();
+                if(monthNumber > 3 && monthNumber < 11) {
+                    return current.month(11);
+                } else {
+                    return current;
+                }
             }
         });
 

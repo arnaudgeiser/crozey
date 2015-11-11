@@ -178,7 +178,7 @@ module.exports = function (grunt) {
                 options: {
 		    name: 'main',
 		    baseUrl: '<%= yeoman.app %>/scripts',
-		    optimize: 'none',
+		    //optimize: 'none',
 		    mainConfigFile: '<%= yeoman.app %>/scripts/app-build.js',
 		    preserveLicenseComments: false,
 		    useStrict: true,
@@ -384,7 +384,6 @@ module.exports = function (grunt) {
         'htmlmin',
         'cssmin',
         'uglify',
-        //'string-replace',
         'copy',
         'rev',
         'usemin'

@@ -71,7 +71,7 @@ define([
             this.supprimer.show();
             this.reserver.text('Modifier');
             this.modalAddEvent.on('shown.bs.modal', function (e) {
-                that.reserver.focus();
+                that.title.select().focus();
             })
             this.modalAddEvent.modal();
         },
