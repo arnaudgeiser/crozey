@@ -127,8 +127,12 @@ define([
                 var width = window.innerWidth; 
                 if(width < 1366) {
                     return 350;   
-                } else {
+                } 
+                else if (width < 1920) {
                     return 450;
+                }
+                else {
+                    return 550;
                 }
             },
             getCalendarStartDate : function() {

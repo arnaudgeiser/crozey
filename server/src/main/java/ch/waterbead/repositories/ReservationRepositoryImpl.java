@@ -39,4 +39,9 @@ public class ReservationRepositoryImpl implements ReservationRepositoryCustom {
 				.setParameter(PARAM_END_DATE, end)
 				.getResultList();
 	}
+	
+	@Override
+	public List<Reservation> findReservationsChevauchantes(Reservation reservation) {
+		return getReservations(reservation.getFrom(), reservation.getTo());
+	}
 }

@@ -28,7 +28,7 @@ remotes {
 	server1 {
 		host = 'chez-mayon.ch'
 		user = 'root'
-		password = 'MarXheroes4'
+		password = '123'
 		knownHosts = allowAnyHosts
 	}
 }
@@ -76,6 +76,7 @@ processResources {
 task customDist(type: Zip, dependsOn : bootRepackage) {
 	from(jar.outputs.files)
 	from(clientDistPath) {
+		exclude('**/config.js')
 		into('client')
 	}
 	baseName 'crozey'

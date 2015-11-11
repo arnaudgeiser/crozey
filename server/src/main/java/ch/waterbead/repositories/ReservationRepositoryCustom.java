@@ -8,4 +8,5 @@ import ch.waterbead.models.Reservation;
 public interface ReservationRepositoryCustom {
 	List<Reservation> findByMonthAndYear(LocalDate start, LocalDate end);
 	List<Reservation> findByYear(int year);
+	List<Reservation> findReservationsChevauchantes(Reservation reservation);
 }
