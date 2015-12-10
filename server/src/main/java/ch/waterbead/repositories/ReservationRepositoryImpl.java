@@ -32,9 +32,8 @@ public class ReservationRepositoryImpl implements ReservationRepositoryCustom {
 		return getReservations(start, end);
 	}
 	
-	@SuppressWarnings("unchecked")
 	private List<Reservation> getReservations (LocalDate start, LocalDate end) {
-		return em.createQuery(QUERY_RESERVATIONS)
+		return em.createQuery(QUERY_RESERVATIONS, Reservation.class)
 				.setParameter(PARAM_START_DATE, start)
 				.setParameter(PARAM_END_DATE, end)
 				.getResultList();
