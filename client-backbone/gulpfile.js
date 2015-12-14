@@ -12,7 +12,7 @@ var paths = {
 };
 
 gulp.task('install', function() {
-	gulp.src(['./bower.json','./package.json']).pipe(install());
+	return gulp.src(['./bower.json','./package.json']).pipe(install());
 });
 
 gulp.task('scripts', function() {
