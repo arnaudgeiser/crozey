@@ -11,7 +11,7 @@ var paths = {
 };
 
 gulp.task('install', function(cb) {
-	gulp.src(['./bower.json','./package.json']).pipe(install());
+	gulp.src(['./bower.json','./package.json']).pipe(install({production: true}));
 	cb();
 });
 
