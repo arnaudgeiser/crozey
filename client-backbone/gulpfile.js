@@ -11,7 +11,9 @@ var paths = {
 	dist: 'dist2/'
 };
 
-gulp.src(['./bower.json','./package.json']).pipe(install());
+gulp.task('install', function() {
+	gulp.src(['./bower.json','./package.json']).pipe(install());
+});
 
 gulp.task('scripts', function() {
 	return gulp.src('app/scripts/main.js')
@@ -30,6 +32,7 @@ gulp.task('usemin', function() {
 
 
 gulp.task('build',[
+	'install',
 	'usemin',
 	'scripts'
 ]);
