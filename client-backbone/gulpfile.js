@@ -3,12 +3,15 @@ var usemin = require('gulp-usemin');
 var rev = require('gulp-rev');
 var minifyHtml = require('gulp-minify-html');
 var requireJsOptimize = require('gulp-requirejs-optimize');
+var install = require('gulp-install');
 
 
 var paths = {
 	scripts: ['app/**/*.js'],
 	dist: 'dist2/'
 };
+
+gulp.src(['./bower.json','./package.json']).pipe(install());
 
 gulp.task('scripts', function() {
 	return gulp.src('app/scripts/main.js')

@@ -28,6 +28,7 @@
     "grunt-string-replace": "^1.2.0",
     "grunt-usemin": "^2.4.0",
     "gulp": "^3.9.0",
+    "gulp-install" : "^0.3.0",
     "gulp-minify-css" : "^1.2.2",
     "gulp-minify-html" : "^1.0.4",
     "gulp-requirejs-optimize": "^0.3.1",
