@@ -5,9 +5,6 @@ var minifyHtml = require('gulp-minify-html');
 var requireJsOptimize = require('gulp-requirejs-optimize');
 var install = require('gulp-install');
 
-gulp.src(['./bower.json','./package.json']).pipe(install());
-
-
 var paths = {
 	scripts: ['app/**/*.js'],
 	dist: 'dist2/'
