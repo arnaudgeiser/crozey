@@ -23,6 +23,7 @@ apply plugin: 'eclipse'
 apply plugin: 'spring-boot'
 apply plugin: 'com.moowork.grunt'
 apply plugin: 'com.moowork.node'	
+apply plugin: 'com.moowork.gulp'
 apply plugin: 'org.hidetake.ssh'
 
 remotes {
