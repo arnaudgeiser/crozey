@@ -12,6 +12,7 @@ buildscript {
         classpath("org.springframework.boot:spring-boot-gradle-plugin:1.2.5.RELEASE")
         classpath('com.moowork.gradle:gradle-grunt-plugin:0.10')
         classpath('com.moowork.gradle:gradle-node-plugin:0.10')
+	classpath('com.moowork.gradle:gradle-gulp-plugin:0.10')
         classpath('org.hidetake:gradle-ssh-plugin:1.1.3')
         
     }
@@ -22,6 +23,7 @@ apply plugin: 'eclipse'
 apply plugin: 'spring-boot'
 apply plugin: 'com.moowork.grunt'
 apply plugin: 'com.moowork.node'	
+apply plugin: 'com.moowork.gulp'
 apply plugin: 'org.hidetake.ssh'
 
 remotes {
@@ -82,6 +84,15 @@ task customDist(type: Zip, dependsOn : bootRepackage) {
 	baseName 'crozey'
 }
 
+task gulpDist(type: Zip, dependsOn : bootRepackage) {
+	from(jar.outputs.files)
+	from(clientDistPath) {
+		exclude('**/config.js')
+		into('client')
+	}
+	baseName 'crozey'
+}
+
 def archivePath;
 
 task deployToProd(dependsOn : bootRepackage) << {
@@ -107,8 +118,19 @@ customDist.dependsOn(grunt_build)
 grunt_build.dependsOn(npmInstall)
 grunt_build.dependsOn(installGrunt)
 
+gulpDist.dependsOn(gulp_build)
+
+gulp_build.dependsOn 'installGulp'
+gulp_build.dependsOn 'npmInstall'
+
 grunt {
 	workDir = file(clientPath)
+	bufferOutput = false
+}
+
+gulp {
+	workDir = file(clientPath)
+	colors = true
 	bufferOutput = false
 }
 
