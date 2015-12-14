@@ -377,7 +377,7 @@ module.exports = function (grunt) {
         'clean:dist',
         'createDefaultTemplate',
         'jst',
-        'sass:dist',
+        //'sass:dist',
         'useminPrepare',
         'requirejs',
         'imagemin',
