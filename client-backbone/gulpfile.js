@@ -10,8 +10,9 @@ var paths = {
 	dist: 'dist2/'
 };
 
-gulp.task('install', function() {
-	return gulp.src(['./bower.json','./package.json']).pipe(install());
+gulp.task('install', function(cb) {
+	gulp.src(['./bower.json','./package.json']).pipe(install());
+	cb();
 });
 
 gulp.task('scripts', function() {
